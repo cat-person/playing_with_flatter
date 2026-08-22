@@ -1,72 +1,71 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../bloc/main/bloc.dart';
-import '../bloc/main/event.dart';
-import '../bloc/main/state.dart';
+import 'my_page.dart';
+import '../vm/main/state.dart';
+import '../vm/main/event.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class HomePage extends MyPage<MainState, MainEvent> {
+  const HomePage({
+    super.key,
+    required super.stream,
+    required super.initialData,
+    required super.eventHandler,
+  });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, AsyncSnapshot<MainState> snap) {
     final ThemeData theme = Theme.of(context);
 
     final ColorScheme colorScheme = theme.colorScheme;
 
-    final MainBloc mainBloc = context.read<MainBloc>();
-    return BlocBuilder<MainBloc, MainState>(
-      builder: (context, state) {
-        return Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
+    return Padding(
+      padding: EdgeInsets.all(16.0),
+      child: Column(
+        children: [
+          Spacer(),
+          Wrap(
+            direction: Axis.horizontal,
+            spacing: 8.0, // gap between adjacent children
+            runSpacing: 4.0, // gap between lines
             children: [
-              Spacer(),
-              Wrap(
-                direction: Axis.horizontal,
-                spacing: 8.0, // gap between adjacent children
-                runSpacing: 4.0, // gap between lines
-                children: [
-                  Text(state.letter),
-                  Text("UwU: ${state.letter}"),
-                  Text(state.letter),
-                ],
+              Text("${snap.data?.letter}"),
+              Text("UwU: ${snap.data?.letter}"),
+              Text("${snap.data?.letter}"),
+            ],
+          ),
+          Spacer(),
+          Wrap(
+            direction: Axis.horizontal,
+            spacing: 8.0, // gap between adjacent children
+            runSpacing: 4.0, // gap between lines
+            children: [
+              TextButton(
+                onPressed: () {
+                  eventHandler(A());
+                },
+                style: TextButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: const .all(Radius.circular(8)),
+                    side: BorderSide(color: colorScheme.primary, width: 5),
+                  ),
+                ),
+                child: Text("A"),
               ),
-              Spacer(),
-              Wrap(
-                direction: Axis.horizontal,
-                spacing: 8.0, // gap between adjacent children
-                runSpacing: 4.0, // gap between lines
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      mainBloc.add(A());
-                    },
-                    style: TextButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: const .all(Radius.circular(8)),
-                        side: BorderSide(color: colorScheme.primary, width: 5),
-                      ),
-                    ),
-                    child: Text("A"),
+              TextButton(
+                onPressed: () {
+                  eventHandler(B());
+                },
+                style: TextButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: const .all(Radius.circular(8)),
+                    side: BorderSide(color: colorScheme.primary, width: 5),
                   ),
-                  TextButton(
-                    onPressed: () {
-                      mainBloc.add(B());
-                    },
-                    style: TextButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: const .all(Radius.circular(8)),
-                        side: BorderSide(color: colorScheme.primary, width: 5),
-                      ),
-                    ),
-                    child: Text("B"),
-                  ),
-                ],
+                ),
+                child: Text("B"),
               ),
             ],
           ),
-        );
-      },
+        ],
+      ),
     );
   }
 }

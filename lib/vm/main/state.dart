@@ -1,4 +1,4 @@
 class MainState {
   final String letter;
-  MainState(this.letter);
+  const MainState(this.letter);
 }
