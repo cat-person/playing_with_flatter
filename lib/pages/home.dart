@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:snd/repo/pojo/origins.dart';
 import 'my_page.dart';
 import 'package:snd/vm/main/main_vm.dart';
 
@@ -19,13 +20,27 @@ class HomePage extends MyPage<MainState, MainEvent> {
         padding: const EdgeInsets.all(8),
         itemCount: entries.length,
         itemBuilder: (BuildContext context, int index) {
-          return SizedBox(
-            height: 50,
-            child: Center(child: Text('Entry ${entries[index]}')),
-          );
+          final String originId = entries[index];
+          final Origin? origin = snap.data?.origins[originId];
+          if (originId.isNotEmpty && origin != null) {
+            return OriginListItem(originId: originId, origin: origin);
+          }
+          return Text("Can't read entity with index: $index");
         },
       );
     }
     return Text("Cant read entries");
+  }
+}
+
+class OriginListItem extends StatelessWidget {
+  final String originId;
+  final Origin origin;
+
+  OriginListItem({super.key, required this.originId, required this.origin});
+
+  @override
+  build(BuildContext context) {
+    return SizedBox(height: 80, child: Center(child: Text('Entry $originId')));
   }
 }
