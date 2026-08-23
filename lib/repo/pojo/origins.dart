@@ -8,7 +8,7 @@ Map<String, Origin> defaultOrigins = {
     PrimaryStat.strength: 6,
     PrimaryStat.speed: 5,
     PrimaryStat.perception: 4,
-    PrimaryStat.charisma: 4,
+    PrimaryStat.intelligence: 4,
     PrimaryStat.constitution: 6,
   }, {}),
   // Const ++ Str + myst - per - char -
@@ -17,7 +17,7 @@ Map<String, Origin> defaultOrigins = {
     PrimaryStat.strength: 6,
     PrimaryStat.speed: 5,
     PrimaryStat.perception: 4,
-    PrimaryStat.charisma: 4,
+    PrimaryStat.intelligence: 4,
     PrimaryStat.constitution: 6,
   }, {}),
   // Const ++ Str + myst - per - char -
@@ -26,7 +26,7 @@ Map<String, Origin> defaultOrigins = {
     PrimaryStat.strength: 6,
     PrimaryStat.speed: 5,
     PrimaryStat.perception: 4,
-    PrimaryStat.charisma: 4,
+    PrimaryStat.intelligence: 4,
     PrimaryStat.constitution: 6,
   }, {}),
   // Const ++ Str + myst - per - char -
@@ -35,7 +35,7 @@ Map<String, Origin> defaultOrigins = {
     PrimaryStat.strength: 6,
     PrimaryStat.speed: 5,
     PrimaryStat.perception: 4,
-    PrimaryStat.charisma: 4,
+    PrimaryStat.intelligence: 4,
     PrimaryStat.constitution: 6,
   }, {}),
   // Const ++ Str + myst - per - char -
@@ -44,7 +44,7 @@ Map<String, Origin> defaultOrigins = {
     PrimaryStat.strength: 6,
     PrimaryStat.speed: 5,
     PrimaryStat.perception: 4,
-    PrimaryStat.charisma: 4,
+    PrimaryStat.intelligence: 4,
     PrimaryStat.constitution: 6,
   }, {}),
   // Const ++ Str + myst - per - char -
@@ -53,7 +53,7 @@ Map<String, Origin> defaultOrigins = {
     PrimaryStat.strength: 6,
     PrimaryStat.speed: 5,
     PrimaryStat.perception: 4,
-    PrimaryStat.charisma: 4,
+    PrimaryStat.intelligence: 4,
     PrimaryStat.constitution: 6,
   }, {}),
 };

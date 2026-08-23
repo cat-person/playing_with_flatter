@@ -16,3 +16,12 @@ class Modifier {
 
   Modifier(this.statId, this.modifier, this.upTo);
 }
+
+Map<String, Sigil> common = {
+  "mystic": Sigil([], [], []),
+  "muscular": Sigil([], [], []),
+  "fast_hands": Sigil([], [], []),
+  "perceptive": Sigil([], [], []),
+  "hardy": Sigil([], [], []),
+  "pretender": Sigil([], [], []),
+};

@@ -21,7 +21,7 @@ class HomePage extends MyPage<MainState, MainEvent> {
         children: [
           Text(
             "Selected origin: ${snap.data?.selectedOrigin}",
-            style: textTheme.labelLarge,
+            style: textTheme.headlineLarge,
           ),
           SizedBox(
             height: 220,

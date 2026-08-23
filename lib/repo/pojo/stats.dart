@@ -29,7 +29,7 @@ abstract class PrimaryStat extends Stat {
   static const String speed = "speed";
   static const String perception = "perception";
   static const String constitution = "constitution";
-  static const String charisma = "charisma";
+  static const String intelligence = "intelligence";
 
   List<Modifier> modifiers;
   PrimaryStat(super.statId, this.modifiers);
