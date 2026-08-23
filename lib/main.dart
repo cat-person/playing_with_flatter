@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:snd/repo/origins.dart';
 import 'vm/main/main_vm.dart';
-import 'vm/main/state.dart';
 import 'package:snd/pages/home.dart';
 
 void main() {
@@ -10,16 +10,17 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  // This widget is  the root of your application.
   @override
   Widget build(BuildContext context) {
-    MainVM mainVM = MainVM();
+    OriginsRepo repo = OriginsRepo();
+    MainVM mainVM = MainVM(repo);
     return MaterialApp(
-      title: 'Flutter App',
+      title: 'Flutter Pupupu',
       theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.deepPurple)),
       home: HomePage(
         stream: mainVM.stream,
-        initialData: MainState("N"),
+        initialData: mainVM.latestState,
         eventHandler: mainVM.eventHandler,
       ),
     );

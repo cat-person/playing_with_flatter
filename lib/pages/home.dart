@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'my_page.dart';
-import '../vm/main/state.dart';
-import '../vm/main/event.dart';
+import 'package:snd/vm/main/main_vm.dart';
 
 class HomePage extends MyPage<MainState, MainEvent> {
   const HomePage({
@@ -13,59 +12,20 @@ class HomePage extends MyPage<MainState, MainEvent> {
 
   @override
   Widget build(BuildContext context, AsyncSnapshot<MainState> snap) {
-    final ThemeData theme = Theme.of(context);
+    final List<String>? entries = snap.data?.origins.keys.toList();
 
-    final ColorScheme colorScheme = theme.colorScheme;
-
-    return Padding(
-      padding: EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          Spacer(),
-          Wrap(
-            direction: Axis.horizontal,
-            spacing: 8.0, // gap between adjacent children
-            runSpacing: 4.0, // gap between lines
-            children: [
-              Text("${snap.data?.letter}"),
-              Text("UwU: ${snap.data?.letter}"),
-              Text("${snap.data?.letter}"),
-            ],
-          ),
-          Spacer(),
-          Wrap(
-            direction: Axis.horizontal,
-            spacing: 8.0, // gap between adjacent children
-            runSpacing: 4.0, // gap between lines
-            children: [
-              TextButton(
-                onPressed: () {
-                  eventHandler(A());
-                },
-                style: TextButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: const .all(Radius.circular(8)),
-                    side: BorderSide(color: colorScheme.primary, width: 5),
-                  ),
-                ),
-                child: Text("A"),
-              ),
-              TextButton(
-                onPressed: () {
-                  eventHandler(B());
-                },
-                style: TextButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: const .all(Radius.circular(8)),
-                    side: BorderSide(color: colorScheme.primary, width: 5),
-                  ),
-                ),
-                child: Text("B"),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
+    if (entries != null) {
+      return ListView.builder(
+        padding: const EdgeInsets.all(8),
+        itemCount: entries.length,
+        itemBuilder: (BuildContext context, int index) {
+          return SizedBox(
+            height: 50,
+            child: Center(child: Text('Entry ${entries[index]}')),
+          );
+        },
+      );
+    }
+    return Text("Cant read entries");
   }
 }

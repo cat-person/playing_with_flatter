@@ -1,5 +1,15 @@
-import 'package:snd/repo/pojo/sigil.dart';
+import 'base/repo.dart';
+import 'pojo/origins.dart';
+import 'dart:async';
 
-class OriginsRepo extends Repo<List<Sigil>> {
-  OriginsRepo(   )
+class OriginsRepo extends Repo<Map<String, Origin>, OriginsEvent> {
+  OriginsRepo()
+    : super(defaultOrigins, StreamController<Map<String, Origin>>());
+
+  @override
+  bool eventHandler(OriginsEvent event) {
+    return false;
+  }
 }
+
+sealed class OriginsEvent {}

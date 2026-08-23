@@ -1,10 +1,10 @@
 import 'dart:async';
 
-abstract class VM<TState, TEvent> {
+abstract class Repo<TState, TEvent> {
   final StreamController<TState> _streamController;
   TState _latestState;
 
-  VM(this._latestState, this._streamController) {
+  Repo(this._latestState, this._streamController) {
     _streamController.add(_latestState);
   }
 
