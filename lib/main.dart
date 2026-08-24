@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:snd/repo/origins.dart';
+import 'package:snd/repo/sigil.dart';
 import 'vm/main/main_vm.dart';
 import 'package:snd/pages/home.dart';
 
@@ -13,8 +14,9 @@ class MyApp extends StatelessWidget {
   // This widget is  the root of your application.
   @override
   Widget build(BuildContext context) {
-    OriginsRepo repo = OriginsRepo();
-    MainVM mainVM = MainVM(repo);
+    OriginsRepo originsRepo = OriginsRepo();
+    SigilsRepo sigilsRepo = SigilsRepo();
+    MainVM mainVM = MainVM(originsRepo, sigilsRepo);
     return MaterialApp(
       title: 'Flutter Pupupu',
       theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.deepPurple)),

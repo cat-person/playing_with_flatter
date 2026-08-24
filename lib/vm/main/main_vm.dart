@@ -1,13 +1,19 @@
 import 'dart:async';
 import 'package:snd/repo/origins.dart';
+import 'package:snd/repo/sigil.dart';
 
 import '../base/vm.dart';
 import '../../repo/pojo/origins.dart';
+import '../../repo/pojo/sigil.dart';
 
 class MainVM extends VM<MainState, MainEvent> {
-  MainVM(OriginsRepo originsRepo)
+  MainVM(OriginsRepo originsRepo, SigilsRepo sigilsRepo)
     : super(
-        MainState(origins: originsRepo.latestState, selectedOrigin: ""),
+        MainState(
+          origins: originsRepo.latestState,
+          selectedOrigin: "",
+          sigils: sigilsRepo.latestState,
+        ),
         StreamController<MainState>(),
       );
 
@@ -23,14 +29,24 @@ class MainVM extends VM<MainState, MainEvent> {
 
 class MainState {
   final Map<String, Origin> origins;
+  final Map<String, Sigil> sigils;
   final String selectedOrigin;
 
-  const MainState({required this.origins, required this.selectedOrigin});
+  const MainState({
+    required this.origins,
+    required this.selectedOrigin,
+    required this.sigils,
+  });
 
-  MainState copyWith({Map<String, Origin>? origins, String? selectedOrigin}) {
+  MainState copyWith({
+    Map<String, Origin>? origins,
+    String? selectedOrigin,
+    Map<String, Sigil>? sigils,
+  }) {
     return MainState(
       origins: origins ?? this.origins,
       selectedOrigin: selectedOrigin ?? this.selectedOrigin,
+      sigils: sigils ?? this.sigils,
     );
   }
 }

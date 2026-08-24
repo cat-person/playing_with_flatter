@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:snd/repo/pojo/origins.dart';
+import 'package:snd/repo/pojo/sigil.dart';
 import 'my_page.dart';
 import 'package:snd/vm/main/main_vm.dart';
 
@@ -13,40 +14,74 @@ class HomePage extends MyPage<MainState, MainEvent> {
 
   @override
   Widget build(BuildContext context, AsyncSnapshot<MainState> snap) {
-    final List<String>? entries = snap.data?.origins.keys.toList();
+    final List<String>? originEntries = snap.data?.origins.keys.toList();
+    final List<String>? sigilEntries = snap.data?.sigils.keys.toList();
     final textTheme = Theme.of(context).textTheme;
 
-    if (entries != null) {
-      return Column(
-        children: [
-          Text(
-            "Selected origin: ${snap.data?.selectedOrigin}",
-            style: textTheme.headlineLarge,
+    return Column(
+      children: [
+        SizedBox(height: 12), // Add spacing
+        Text(
+          "Selected origin: ${snap.data?.selectedOrigin}",
+          style: textTheme.headlineLarge,
+        ),
+        SizedBox(height: 12), // Add spacing
+        SizedBox(
+          height: 220,
+          child: Center(
+            child: originEntries == null || originEntries.isEmpty
+                ? Text("Cant read origins")
+                : Container(
+                    color: Colors.red,
+                    child: ListView.builder(
+                      padding: const EdgeInsets.all(8),
+                      scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                      itemCount: originEntries.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final String originId = originEntries[index];
+                        final Origin? origin = snap.data?.origins[originId];
+                        if (originId.isNotEmpty && origin != null) {
+                          return OriginListItem(
+                            originId: originId,
+                            origin: origin,
+                            eventHandler: eventHandler,
+                          );
+                        }
+                        return Text("Can't read entity with index: $index");
+                      },
+                    ),
+                  ),
           ),
-          SizedBox(
-            height: 220,
-            child: ListView.builder(
-              padding: const EdgeInsets.all(8),
-              scrollDirection: Axis.horizontal,
-              itemCount: entries.length,
-              itemBuilder: (BuildContext context, int index) {
-                final String originId = entries[index];
-                final Origin? origin = snap.data?.origins[originId];
-                if (originId.isNotEmpty && origin != null) {
-                  return OriginListItem(
-                    originId: originId,
-                    origin: origin,
-                    eventHandler: eventHandler,
-                  );
-                }
-                return Text("Can't read entity with index: $index");
-              },
-            ),
+        ),
+
+        SizedBox(height: 12), // Add spacing
+        SizedBox(
+          height: 120,
+          child: Center(
+            child: sigilEntries == null || sigilEntries.isEmpty
+                ? Text("Cant read sigils")
+                : Container(
+                    color: Colors.orange,
+                    child: ListView.builder(
+                      padding: const EdgeInsets.all(8),
+                      scrollDirection: Axis.horizontal,
+                      // shrinkWrap: true,
+                      itemCount: sigilEntries.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final String sigilId = sigilEntries[index];
+                        final Sigil? sigil = snap.data?.sigils[sigilId];
+                        if (sigilId.isNotEmpty && sigil != null) {
+                          return SigilListItem(sigilId: sigilId, sigil: sigil);
+                        }
+                        return Text("Can't read entity with index: $index");
+                      },
+                    ),
+                  ),
           ),
-        ],
-      );
-    }
-    return Text("Cant read entries");
+        ),
+      ],
+    );
   }
 
   bool originEventHandler(SelectOriginE event) {
@@ -112,6 +147,44 @@ class OriginListItem extends StatelessWidget {
                   ),
                 ),
               ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SigilListItem extends StatelessWidget {
+  final String sigilId;
+  final Sigil sigil;
+  // final bool Function(SelectOriginE event) eventHandler;
+
+  const SigilListItem({super.key, required this.sigilId, required this.sigil});
+
+  @override
+  build(BuildContext context) {
+    // List<String> primaryStatIds = origin.primaryStats.keys.toList();
+    final textTheme = Theme.of(context).textTheme;
+    return UnconstrainedBox(
+      child: SizedBox(
+        height: 100,
+        width: 100,
+        child: GestureDetector(
+          onTap: () {},
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            elevation: 2,
+            color: Colors.grey,
+            child: Center(
+              child: Text(
+                sigilId,
+                style: textTheme.labelLarge?.copyWith(
+                  backgroundColor: Colors.lightBlueAccent,
+                ),
+              ),
             ),
           ),
         ),
