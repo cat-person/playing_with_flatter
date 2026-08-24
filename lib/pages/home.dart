@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:snd/repo/pojo/origins.dart';
 import 'package:snd/repo/pojo/sigil.dart';
+import 'package:snd/vm/base/vm.dart';
 import 'my_page.dart';
 import 'package:snd/vm/main/main_vm.dart';
 
-class HomePage extends MyPage<MainState, MainEvent> {
+class HomePage extends MyPage<MainState> {
   const HomePage({
     super.key,
     required super.stream,
@@ -83,16 +84,12 @@ class HomePage extends MyPage<MainState, MainEvent> {
       ],
     );
   }
-
-  bool originEventHandler(SelectOriginE event) {
-    return eventHandler(event);
-  }
 }
 
 class OriginListItem extends StatelessWidget {
   final String originId;
   final Origin origin;
-  final bool Function(SelectOriginE event) eventHandler;
+  final bool Function(VMEvent event) eventHandler;
 
   const OriginListItem({
     super.key,
@@ -111,7 +108,9 @@ class OriginListItem extends StatelessWidget {
         width: 200,
         child: GestureDetector(
           onTap: () {
-            eventHandler(SelectOriginE(originId));
+            eventHandler(
+              VMEvent("select_origin", params: {"selected_origin": originId}),
+            );
           },
           child: Card(
             shape: RoundedRectangleBorder(

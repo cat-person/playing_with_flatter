@@ -6,7 +6,7 @@ import '../base/vm.dart';
 import '../../repo/pojo/origins.dart';
 import '../../repo/pojo/sigil.dart';
 
-class MainVM extends VM<MainState, MainEvent> {
+class MainVM extends VM<MainState> {
   MainVM(OriginsRepo originsRepo, SigilsRepo sigilsRepo)
     : super(
         MainState(
@@ -18,11 +18,17 @@ class MainVM extends VM<MainState, MainEvent> {
       );
 
   @override
-  bool eventHandler(MainEvent event) {
-    switch (event) {
-      case SelectOriginE(selectedOrigin: final selectedOrigin):
-        update(latestState.copyWith(selectedOrigin: selectedOrigin));
+  bool eventHandler(VMEvent event) {
+    switch (event.id) {
+      case "select_origin":
+        update(
+          latestState.copyWith(
+            selectedOrigin: event.params["selected_origin"] as String,
+          ),
+        );
         return true;
+      default:
+        return false;
     }
   }
 }
@@ -49,12 +55,4 @@ class MainState {
       sigils: sigils ?? this.sigils,
     );
   }
-}
-
-sealed class MainEvent {}
-
-class SelectOriginE extends MainEvent {
-  final String selectedOrigin;
-
-  SelectOriginE(this.selectedOrigin);
 }
