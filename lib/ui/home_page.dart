@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:snd/repo/pojo/origins.dart';
 import 'package:snd/repo/pojo/sigil.dart';
 import 'package:snd/vm/base/vm.dart';
-import 'my_page.dart';
+import 'base/page.dart';
 import 'package:snd/vm/main/main_vm.dart';
 
 class HomePage extends MyPage<MainState> {
@@ -57,23 +57,29 @@ class HomePage extends MyPage<MainState> {
         ),
 
         SizedBox(height: 12), // Add spacing
-        SizedBox(
-          height: 120,
-          child: Center(
+        Center(
+          child: SizedBox(
+            width: 1200,
             child: sigilEntries == null || sigilEntries.isEmpty
                 ? Text("Cant read sigils")
                 : Container(
                     color: Colors.orange,
-                    child: ListView.builder(
+                    child: GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 10, // Number of columns
+                        // crossAxisSpacing: 10,
+                        // mainAxisSpacing: 10,
+                        childAspectRatio: 1.0, // Width/height ratio
+                      ),
                       padding: const EdgeInsets.all(8),
-                      scrollDirection: Axis.horizontal,
-                      // shrinkWrap: true,
+                      // scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
                       itemCount: sigilEntries.length,
                       itemBuilder: (BuildContext context, int index) {
                         final String sigilId = sigilEntries[index];
                         final Sigil? sigil = snap.data?.sigils[sigilId];
                         if (sigilId.isNotEmpty && sigil != null) {
-                          return SigilListItem(sigilId: sigilId, sigil: sigil);
+                          return SigilGridItem(sigilId: sigilId, sigil: sigil);
                         }
                         return Text("Can't read entity with index: $index");
                       },
@@ -154,12 +160,12 @@ class OriginListItem extends StatelessWidget {
   }
 }
 
-class SigilListItem extends StatelessWidget {
+class SigilGridItem extends StatelessWidget {
   final String sigilId;
   final Sigil sigil;
   // final bool Function(SelectOriginE event) eventHandler;
 
-  const SigilListItem({super.key, required this.sigilId, required this.sigil});
+  const SigilGridItem({super.key, required this.sigilId, required this.sigil});
 
   @override
   build(BuildContext context) {
