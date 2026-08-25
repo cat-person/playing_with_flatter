@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:snd/vm/base/vm.dart';
+import 'package:snd/event.dart';
 
 abstract class MyPage<TState>
     extends StreamBuilderBase<TState, AsyncSnapshot<TState>> {
   final TState initialData;
-  final bool Function(VMEvent event) eventHandler;
+  final bool Function(Event event) eventHandler;
 
   const MyPage({
     super.key,

@@ -1,14 +1,13 @@
 import 'base/repo.dart';
 import 'pojo/sigil.dart';
 import 'dart:async';
+import 'package:snd/event.dart';
 
-class SigilsRepo extends Repo<Map<String, Sigil>, SigilsEvent> {
+class SigilsRepo extends Repo<Map<String, Sigil>> {
   SigilsRepo() : super(sigils, StreamController<Map<String, Sigil>>());
 
   @override
-  bool eventHandler(SigilsEvent event) {
+  bool eventHandler(Event event) {
     return false;
   }
 }
-
-sealed class SigilsEvent {}

@@ -1,6 +1,7 @@
 import 'dart:async';
+import 'package:snd/event.dart';
 
-abstract class Repo<TState, TEvent> {
+abstract class Repo<TState> {
   final StreamController<TState> _streamController;
   TState _latestState;
 
@@ -8,7 +9,7 @@ abstract class Repo<TState, TEvent> {
     _streamController.add(_latestState);
   }
 
-  bool eventHandler(TEvent event);
+  bool eventHandler(Event event);
   Stream<TState> get stream => _streamController.stream;
   TState get latestState => _latestState;
 
@@ -17,5 +18,3 @@ abstract class Repo<TState, TEvent> {
     _latestState = newState;
   }
 }
-
-class Event {}
