@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:snd/repo/origins.dart';
 import 'package:snd/repo/sigil.dart';
+import 'package:snd/event.dart';
 
 import '../base/vm.dart';
 import '../../repo/pojo/origins.dart';
@@ -18,7 +19,7 @@ class MainVM extends VM<MainState> {
       );
 
   @override
-  bool eventHandler(VMEvent event) {
+  bool eventHandler(Event event) {
     switch (event.id) {
       case "select_origin":
         update(

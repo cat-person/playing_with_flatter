@@ -17,3 +17,5 @@ abstract class Repo<TState, TEvent> {
     _latestState = newState;
   }
 }
+
+class Event {}

@@ -4,6 +4,7 @@ import 'package:snd/repo/pojo/sigil.dart';
 import 'package:snd/vm/base/vm.dart';
 import 'base/page.dart';
 import 'package:snd/vm/main/main_vm.dart';
+import 'package:snd/event.dart';
 
 class HomePage extends MyPage<MainState> {
   const HomePage({
@@ -95,7 +96,7 @@ class HomePage extends MyPage<MainState> {
 class OriginListItem extends StatelessWidget {
   final String originId;
   final Origin origin;
-  final bool Function(VMEvent event) eventHandler;
+  final bool Function(Event event) eventHandler;
 
   const OriginListItem({
     super.key,
@@ -115,7 +116,7 @@ class OriginListItem extends StatelessWidget {
         child: GestureDetector(
           onTap: () {
             eventHandler(
-              VMEvent("select_origin", params: {"selected_origin": originId}),
+              Event("select_origin", params: {"selected_origin": originId}),
             );
           },
           child: Card(

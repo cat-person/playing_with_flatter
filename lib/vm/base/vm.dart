@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:snd/event.dart';
 
 abstract class VM<TState> {
   final StreamController<TState> _streamController;
@@ -8,7 +9,7 @@ abstract class VM<TState> {
     _streamController.add(_latestState);
   }
 
-  bool eventHandler(VMEvent event);
+  bool eventHandler(Event event);
   Stream<TState> get stream => _streamController.stream;
   TState get latestState => _latestState;
 
@@ -16,11 +17,4 @@ abstract class VM<TState> {
     _streamController.add(newState);
     _latestState = newState;
   }
-}
-
-class VMEvent {
-  final String id;
-  final Map<String, dynamic> params;
-
-  VMEvent(this.id, {this.params = const {}});
 }
