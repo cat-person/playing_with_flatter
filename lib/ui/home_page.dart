@@ -15,8 +15,15 @@ class HomePage extends MyPage<MainState> {
 
   @override
   Widget build(BuildContext context, AsyncSnapshot<MainState> snap) {
-    final List<String>? originEntries = snap.data?.origins.keys.toList();
-    final List<String>? sigilEntries = snap.data?.sigils.keys.toList();
+    MainState? data = snap.data;
+
+    if (data == null) {
+      return Text("NO DATA");
+    }
+    final List<String> originEntries = data.origins.keys.toList();
+    final List<String> sigilEntries = data.sigils.keys.toList();
+    final String selectedOrigin = data.selectedOrigin;
+    final List<String> selectedSigils = data.selectedSigils;
     final textTheme = Theme.of(context).textTheme;
 
     return Column(
@@ -30,29 +37,28 @@ class HomePage extends MyPage<MainState> {
         SizedBox(
           height: 220,
           child: Center(
-            child: originEntries == null || originEntries.isEmpty
-                ? Text("Cant read origins")
-                : Container(
-                    color: Colors.red,
-                    child: ListView.builder(
-                      padding: const EdgeInsets.all(8),
-                      scrollDirection: Axis.horizontal,
-                      shrinkWrap: true,
-                      itemCount: originEntries.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final String originId = originEntries[index];
-                        final Origin? origin = snap.data?.origins[originId];
-                        if (originId.isNotEmpty && origin != null) {
-                          return OriginListItem(
-                            originId: originId,
-                            origin: origin,
-                            eventHandler: eventHandler,
-                          );
-                        }
-                        return Text("Can't read entity with index: $index");
-                      },
-                    ),
-                  ),
+            child: Container(
+              color: Colors.red,
+              child: ListView.builder(
+                padding: const EdgeInsets.all(8),
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                itemCount: originEntries.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final String originId = originEntries[index];
+                  final Origin? origin = snap.data?.origins[originId];
+                  if (originId.isNotEmpty && origin != null) {
+                    return OriginListItem(
+                      originId: originId,
+                      origin: origin,
+                      selected: originId == selectedOrigin,
+                      eventHandler: eventHandler,
+                    );
+                  }
+                  return Text("Can't read entity with index: $index");
+                },
+              ),
+            ),
           ),
         ),
 
@@ -60,31 +66,34 @@ class HomePage extends MyPage<MainState> {
         Center(
           child: SizedBox(
             width: 1200,
-            child: sigilEntries == null || sigilEntries.isEmpty
-                ? Text("Cant read sigils")
-                : Container(
-                    color: Colors.orange,
-                    child: GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 10, // Number of columns
-                        // crossAxisSpacing: 10,
-                        // mainAxisSpacing: 10,
-                        childAspectRatio: 1.0, // Width/height ratio
-                      ),
-                      padding: const EdgeInsets.all(8),
-                      // scrollDirection: Axis.horizontal,
-                      shrinkWrap: true,
-                      itemCount: sigilEntries.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final String sigilId = sigilEntries[index];
-                        final Sigil? sigil = snap.data?.sigils[sigilId];
-                        if (sigilId.isNotEmpty && sigil != null) {
-                          return SigilGridItem(sigilId: sigilId, sigil: sigil);
-                        }
-                        return Text("Can't read entity with index: $index");
-                      },
-                    ),
-                  ),
+            child: Container(
+              color: Colors.deepPurple,
+              child: GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 10, // Number of columns
+                  // crossAxisSpacing: 10,
+                  // mainAxisSpacing: 10,
+                  childAspectRatio: 1.0, // Width/height ratio
+                ),
+                padding: const EdgeInsets.all(8),
+                // scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                itemCount: sigilEntries.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final String sigilId = sigilEntries[index];
+                  final Sigil? sigil = snap.data?.sigils[sigilId];
+                  if (sigilId.isNotEmpty && sigil != null) {
+                    return SigilGridItem(
+                      sigilId: sigilId,
+                      sigil: sigil,
+                      selected: selectedSigils.contains(sigilId),
+                      eventHandler: eventHandler,
+                    );
+                  }
+                  return Text("Can't read entity with index: $index");
+                },
+              ),
+            ),
           ),
         ),
       ],
@@ -95,12 +104,14 @@ class HomePage extends MyPage<MainState> {
 class OriginListItem extends StatelessWidget {
   final String originId;
   final Origin origin;
+  final bool selected;
   final bool Function(Event event) eventHandler;
 
   const OriginListItem({
     super.key,
     required this.originId,
     required this.origin,
+    required this.selected,
     required this.eventHandler,
   });
 
@@ -115,7 +126,7 @@ class OriginListItem extends StatelessWidget {
         child: GestureDetector(
           onTap: () {
             eventHandler(
-              Event("select_origin", params: {"selected_origin": originId}),
+              Event("origin_selected", params: {"origin_id": originId}),
             );
           },
           child: Card(
@@ -123,15 +134,10 @@ class OriginListItem extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
             ),
             elevation: 2,
-            color: Colors.blue,
+            color: selected ? Colors.blue : Colors.blueGrey,
             child: Column(
               children: [
-                Text(
-                  originId,
-                  style: textTheme.headlineMedium?.copyWith(
-                    backgroundColor: Colors.green,
-                  ),
-                ),
+                Text(originId, style: textTheme.headlineMedium),
                 SizedBox(
                   height: 120,
                   width: 200,
@@ -163,9 +169,16 @@ class OriginListItem extends StatelessWidget {
 class SigilGridItem extends StatelessWidget {
   final String sigilId;
   final Sigil sigil;
-  // final bool Function(SelectOriginE event) eventHandler;
+  final bool selected;
+  final bool Function(Event event) eventHandler;
 
-  const SigilGridItem({super.key, required this.sigilId, required this.sigil});
+  const SigilGridItem({
+    super.key,
+    required this.sigilId,
+    required this.sigil,
+    required this.selected,
+    required this.eventHandler,
+  });
 
   @override
   build(BuildContext context) {
@@ -176,13 +189,17 @@ class SigilGridItem extends StatelessWidget {
         height: 100,
         width: 100,
         child: GestureDetector(
-          onTap: () {},
+          onTap: () {
+            eventHandler(
+              Event("sigil_selected", params: {"sigil_id": sigilId}),
+            );
+          },
           child: Card(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
             ),
-            elevation: 2,
-            color: Colors.grey,
+            elevation: selected ? 4 : 2,
+            color: selected ? Colors.orangeAccent : Colors.grey,
             child: Center(
               child: Text(
                 sigilId,

@@ -18,12 +18,27 @@ class MainVM extends EventProcessor<MainState> {
   @override
   bool internalEventHandler(Event event) {
     switch (event.id) {
-      case "select_origin":
+      case "origin_selected":
         update(
           latestState.copyWith(
-            selectedOrigin: event.params["selected_origin"] as String,
+            selectedOrigin: event.params["origin_id"] as String,
           ),
         );
+        return true;
+      case "sigil_selected":
+        String sigilId = event.params["sigil_id"] as String;
+
+        int sigilIdIdx = latestState.selectedSigils.indexOf(sigilId);
+        List<String> newSelectedSigils = (sigilIdIdx == -1)
+            ? [...latestState.selectedSigils, sigilId]
+            : [
+                ...latestState.selectedSigils.getRange(0, sigilIdIdx),
+                ...latestState.selectedSigils.getRange(
+                  sigilIdIdx,
+                  latestState.selectedSigils.length,
+                ),
+              ];
+        update(latestState.copyWith(selectedSigils: newSelectedSigils));
         return true;
       default:
         return false;
@@ -33,24 +48,28 @@ class MainVM extends EventProcessor<MainState> {
 
 class MainState {
   final Map<String, Origin> origins;
-  final Map<String, Sigil> sigils;
   final String selectedOrigin;
+  final Map<String, Sigil> sigils;
+  final List<String> selectedSigils;
 
   const MainState({
     required this.origins,
-    required this.selectedOrigin,
     required this.sigils,
+    this.selectedOrigin = "none",
+    this.selectedSigils = const [],
   });
 
   MainState copyWith({
     Map<String, Origin>? origins,
-    String? selectedOrigin,
     Map<String, Sigil>? sigils,
+    String? selectedOrigin,
+    List<String>? selectedSigils,
   }) {
     return MainState(
       origins: origins ?? this.origins,
-      selectedOrigin: selectedOrigin ?? this.selectedOrigin,
       sigils: sigils ?? this.sigils,
+      selectedOrigin: selectedOrigin ?? this.selectedOrigin,
+      selectedSigils: selectedSigils ?? this.selectedSigils,
     );
   }
 }
