@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:snd/repo/pojo/origins.dart';
 import 'package:snd/repo/pojo/sigil.dart';
-import 'package:snd/vm/base/vm.dart';
 import 'base/page.dart';
 import 'package:snd/vm/main/main_vm.dart';
-import 'package:snd/event.dart';
+import 'package:snd/event_processor/event.dart';
 
 class HomePage extends MyPage<MainState> {
   const HomePage({

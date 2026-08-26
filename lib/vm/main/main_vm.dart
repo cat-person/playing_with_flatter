@@ -1,25 +1,22 @@
-import 'dart:async';
-import 'package:snd/repo/origins.dart';
-import 'package:snd/repo/sigil.dart';
-import 'package:snd/event.dart';
-
-import '../base/vm.dart';
+import 'package:snd/event_processor/event_processor.dart';
+import 'package:snd/repo/origins_repo.dart';
+import 'package:snd/repo/sigils_repo.dart';
+import 'package:snd/event_processor/event.dart';
 import '../../repo/pojo/origins.dart';
 import '../../repo/pojo/sigil.dart';
 
-class MainVM extends VM<MainState> {
-  MainVM(OriginsRepo originsRepo, SigilsRepo sigilsRepo)
+class MainVM extends EventProcessor<MainState> {
+  MainVM(OriginsRepo originsRepo, SigilsRepo sigilsRepo, {super.proxy})
     : super(
         MainState(
           origins: originsRepo.latestState,
           selectedOrigin: "",
           sigils: sigilsRepo.latestState,
         ),
-        StreamController<MainState>(),
       );
 
   @override
-  bool eventHandler(Event event) {
+  bool internalEventHandler(Event event) {
     switch (event.id) {
       case "select_origin":
         update(
