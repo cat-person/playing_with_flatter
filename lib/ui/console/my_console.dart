@@ -22,7 +22,7 @@ class ConsoleVM extends EventProcessor<List<TextSpan>> {
                     style: TextStyle(
                       color: Colors.lightBlue,
                       decoration: TextDecoration.none,
-                      fontSize: 24,
+                      fontSize: 16,
                     ),
                   ),
                   TextSpan(
@@ -30,7 +30,7 @@ class ConsoleVM extends EventProcessor<List<TextSpan>> {
                     style: TextStyle(
                       color: Colors.lightGreen,
                       decoration: TextDecoration.none,
-                      fontSize: 24,
+                      fontSize: 16,
                     ),
                   ),
                 ],
@@ -75,7 +75,7 @@ class MyConsoleWidget extends StatelessWidget {
           return SizedBox(
             height: 240,
             child: ListView.builder(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               itemCount: entries.length,
@@ -97,6 +97,6 @@ class LineListItem extends StatelessWidget {
 
   @override
   build(BuildContext context) {
-    return Text.rich(span);
+    return SizedBox(height: 24, child: Text.rich(span));
   }
 }
