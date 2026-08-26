@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
             initialData: mainVM.latestState,
             eventHandler: mainVM.eventHandler,
           ),
+          Spacer(),
           MyConsoleWidget(consoleVM.stream, [], consoleVM.eventHandler),
         ],
       ),

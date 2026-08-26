@@ -6,10 +6,7 @@ class ConsoleProxy extends EventProcessor<List<Event>> {
 
   @override
   bool internalEventHandler(Event event) {
-    List<Event> updatedEventList = List.from(latestState);
-    updatedEventList.add(event);
-    update(updatedEventList);
-    print("Event list: $updatedEventList");
+    update([event, ...latestState]);
     return true;
   }
 }

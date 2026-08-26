@@ -12,7 +12,32 @@ class ConsoleVM extends EventProcessor<List<TextSpan>> {
         TextSpan(text: "@.@"),
       ]) {
     consoleRepo.stream.listen(
-      (data) => update(data.map((item) => TextSpan(text: item.id)).toList()),
+      (data) => update(
+        data
+            .map(
+              (item) => TextSpan(
+                children: [
+                  TextSpan(
+                    text: "${item.id}: ",
+                    style: TextStyle(
+                      color: Colors.lightBlue,
+                      decoration: TextDecoration.none,
+                      fontSize: 24,
+                    ),
+                  ),
+                  TextSpan(
+                    text: "${item.params}",
+                    style: TextStyle(
+                      color: Colors.lightGreen,
+                      decoration: TextDecoration.none,
+                      fontSize: 24,
+                    ),
+                  ),
+                ],
+              ),
+            )
+            .toList(),
+      ),
       onError: (error) => print('Error: $error'),
       onDone: () => print('Stream closed'),
       cancelOnError: false,
@@ -39,27 +64,29 @@ class MyConsoleWidget extends StatelessWidget {
 
   @override
   build(BuildContext context) {
-    return StreamBuilder<List<TextSpan>>(
-      stream: stream,
-      initialData: initialData,
-      builder: (BuildContext context, AsyncSnapshot<List<TextSpan>> snap) {
-        List<TextSpan>? entries = snap.data;
-        return SizedBox(
-          height: 200,
-          child: (entries != null && entries.isNotEmpty)
-              ? ListView.builder(
-                  padding: const EdgeInsets.all(8),
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: entries.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final TextSpan span = entries[index];
-                    return LineListItem(span);
-                  },
-                )
-              : Text("Can't read entries"),
-        );
-      },
+    // final textTheme = Theme.of(context).textTheme;
+    return Container(
+      color: Colors.black87,
+      child: StreamBuilder<List<TextSpan>>(
+        stream: stream,
+        initialData: initialData,
+        builder: (BuildContext context, AsyncSnapshot<List<TextSpan>> snap) {
+          List<TextSpan> entries = snap.data ?? [];
+          return SizedBox(
+            height: 240,
+            child: ListView.builder(
+              padding: const EdgeInsets.all(8),
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemCount: entries.length,
+              itemBuilder: (BuildContext context, int index) {
+                final TextSpan span = entries[index];
+                return LineListItem(span);
+              },
+            ),
+          );
+        },
+      ),
     );
   }
 }
@@ -70,7 +97,6 @@ class LineListItem extends StatelessWidget {
 
   @override
   build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    return Text("Privet ${span.text}", style: textTheme.labelMedium);
+    return Text.rich(span);
   }
 }
