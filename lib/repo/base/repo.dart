@@ -1,20 +1,21 @@
 import 'dart:async';
-import 'package:snd/event.dart';
+// import 'package:snd/event.dart';
 
-abstract class Repo<TState> {
-  final StreamController<TState> _streamController;
-  TState _latestState;
+// abstract class Repo<TState> {
+//   final StreamController<TState> _streamController;
+//   TState _latestState;
+//   final proxy:
 
-  Repo(this._latestState, this._streamController) {
-    _streamController.add(_latestState);
-  }
+//   Repo(this._latestState, this._streamController) {
+//     _streamController.add(_latestState);
+//   }
 
-  bool eventHandler(Event event);
-  Stream<TState> get stream => _streamController.stream;
-  TState get latestState => _latestState;
+//   bool eventHandler(Event event);
+//   Stream<TState> get stream => _streamController.stream;
+//   TState get latestState => _latestState;
 
-  void update(TState newState) {
-    _streamController.add(newState);
-    _latestState = newState;
-  }
-}
+//   void update(TState newState) {
+//     _streamController.add(newState);
+//     _latestState = newState;
+//   }
+// }

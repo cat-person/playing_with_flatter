@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:snd/event.dart';
+import 'package:snd/event_processor/event.dart';
 
 abstract class MyPage<TState>
     extends StreamBuilderBase<TState, AsyncSnapshot<TState>> {
