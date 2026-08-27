@@ -155,7 +155,7 @@ class OriginListItem extends StatelessWidget {
 
   @override
   build(BuildContext context) {
-    List<String> primaryStatIds = origin.primaryStats.keys.toList();
+    // List<String> primaryStatIds = origin.primaryStats.keys.toList();
     final textTheme = Theme.of(context).textTheme;
     return UnconstrainedBox(
       child: SizedBox(
@@ -173,8 +173,11 @@ class OriginListItem extends StatelessWidget {
             ),
             elevation: 2,
             color: selected ? Colors.blue : Colors.blueGrey,
-            child: Column(
-              children: [Text(originId, style: textTheme.headlineMedium)],
+            child: Center(
+              child: Text(
+                originId,
+                style: textTheme.titleLarge?.copyWith(color: Colors.white),
+              ),
             ),
           ),
         ),
@@ -198,7 +201,7 @@ class SigilSelectionItem extends StatelessWidget {
   @override
   build(BuildContext context) {
     // List<String> primaryStatIds = origin.primaryStats.keys.toList();
-    // final textTheme = Theme.of(context).textTheme;
+    final textTheme = Theme.of(context).textTheme;
     return SizedBox(
       height: 80,
       child: ListView.builder(
@@ -209,40 +212,13 @@ class SigilSelectionItem extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           final String sigilId = sigilSelection.sigilsToChooseFrom[index];
           return SizedBox(
-            width: 180,
-            child: Card(child: Center(child: Text(sigilId))),
+            width: 200,
+            child: Card(
+              child: Center(child: Text(sigilId, style: textTheme.titleLarge)),
+            ),
           );
         },
       ),
     );
-
-    // UnconstrainedBox(
-    //   child: SizedBox(
-    //     height: 100,
-    //     width: 100,
-    //     child: GestureDetector(
-    //       onTap: () {
-    //         eventHandler(
-    //           Event("sigil_selected", params: {"sigil_id": sigilId}),
-    //         );
-    //       },
-    //       child: Card(
-    //         shape: RoundedRectangleBorder(
-    //           borderRadius: BorderRadius.circular(16),
-    //         ),
-    //         elevation: selected ? 4 : 2,
-    //         color: selected ? Colors.orangeAccent : Colors.grey,
-    //         child: Center(
-    //           child: Text(
-    //             sigilId,
-    //             style: textTheme.labelLarge?.copyWith(
-    //               backgroundColor: Colors.lightBlueAccent,
-    //             ),
-    //           ),
-    //         ),
-    //       ),
-    //     ),
-    //   ),
-    // );
   }
 }
