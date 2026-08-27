@@ -1,4 +1,3 @@
-import 'sigil.dart';
 import 'stats.dart';
 
 Map<String, Origin> defaultOrigins = {

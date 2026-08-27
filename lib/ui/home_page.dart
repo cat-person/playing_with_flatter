@@ -31,7 +31,7 @@ class HomePage extends MyPage<MainState> {
         MCWidget(mc),
         SizedBox(height: 12), // Add spacing
         SizedBox(
-          height: 180,
+          height: 80,
           child: Center(
             child: Container(
               color: Colors.red,
@@ -47,7 +47,7 @@ class HomePage extends MyPage<MainState> {
                     return OriginListItem(
                       originId: originId,
                       origin: origin,
-                      selected: originId == mc.origin,
+                      selected: originId == mc.originId,
                       eventHandler: eventHandler,
                     );
                   }
@@ -105,23 +105,49 @@ class MCWidget extends StatelessWidget {
   @override
   build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final statKeys = mc.stats.keys.toList();
     return SizedBox(
-      height: 160,
+      height: 240,
       width: 1200,
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         color: Colors.blue[900],
-        child: Column(
-          children: [
-            Text(
-              "Hero: ${mc.origin}",
-              style: textTheme.titleLarge?.copyWith(color: Colors.red),
-            ),
-            Text(
-              mc.sigils.join(', '),
-              style: textTheme.titleSmall?.copyWith(color: Colors.deepOrange),
-            ),
-          ],
+        child: Center(
+          child: Column(
+            children: [
+              Text(
+                "Hero: ${mc.originId}",
+                style: textTheme.titleLarge?.copyWith(color: Colors.red[200]),
+              ),
+              Text(
+                mc.sigils.join(', '),
+                style: textTheme.titleSmall?.copyWith(
+                  color: Colors.deepOrange[200],
+                ),
+              ),
+              SizedBox(
+                height: 160,
+                width: 400,
+                child: ListView.builder(
+                  padding: const EdgeInsets.all(8),
+                  itemCount: mc.stats.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final String statId = statKeys[index];
+                    final int? statValue = mc.stats[statId];
+                    if (statId.isNotEmpty && statValue != null) {
+                      return Text(
+                        "$statId: $statValue",
+                        style: textTheme.titleSmall?.copyWith(
+                          color: Colors.grey[200],
+                        ),
+                      );
+                    }
+                    return Text("Can't read stat with index: $index");
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -148,7 +174,7 @@ class OriginListItem extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     return UnconstrainedBox(
       child: SizedBox(
-        height: 160,
+        height: 60,
         width: 200,
         child: GestureDetector(
           onTap: () {
@@ -163,28 +189,7 @@ class OriginListItem extends StatelessWidget {
             elevation: 2,
             color: selected ? Colors.blue : Colors.blueGrey,
             child: Column(
-              children: [
-                Text(originId, style: textTheme.headlineMedium),
-                SizedBox(
-                  height: 100,
-                  width: 200,
-                  child: ListView.builder(
-                    padding: const EdgeInsets.all(8),
-                    itemCount: primaryStatIds.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final String statId = primaryStatIds[index];
-                      final int? statValue = origin.primaryStats[statId];
-                      if (statId.isNotEmpty && statValue != null) {
-                        return Text(
-                          "$statId: $statValue",
-                          style: textTheme.labelMedium,
-                        );
-                      }
-                      return Text("Can't read stat with index: $index");
-                    },
-                  ),
-                ),
-              ],
+              children: [Text(originId, style: textTheme.headlineMedium)],
             ),
           ),
         ),

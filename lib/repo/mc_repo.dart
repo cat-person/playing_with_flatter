@@ -10,7 +10,7 @@ class MCRepo extends EventProcessor<MC> {
   bool internalEventHandler(Event event) {
     switch (event.id) {
       case "origin_selected":
-        update(latestState.copyWith(origin: event.params["origin_id"]));
+        update(latestState.copyWith(originId: event.params["origin_id"]));
         return true;
       case "sigil_selected":
         String sigilId = event.params["sigil_id"];

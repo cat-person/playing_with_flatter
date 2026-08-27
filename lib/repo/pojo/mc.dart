@@ -1,10 +1,25 @@
+import 'origins.dart';
+
 class MC {
-  final String origin;
+  final String originId;
   final List<String> sigils;
 
-  MC({this.origin = 'none', this.sigils = const []});
+  MC({this.originId = 'none', this.sigils = const []});
 
-  MC copyWith({String? origin, List<String>? sigils}) {
-    return MC(origin: origin ?? this.origin, sigils: sigils ?? this.sigils);
+  MC copyWith({String? originId, List<String>? sigils}) {
+    return MC(
+      originId: originId ?? this.originId,
+      sigils: sigils ?? this.sigils,
+    );
+  }
+
+  Map<String, int> get stats {
+    Origin? origin = defaultOrigins[originId];
+    if (origin != null) {
+      Map<String, int> originStats = origin.primaryStats;
+      return originStats;
+    } else {
+      return {};
+    }
   }
 }
