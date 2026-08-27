@@ -3,11 +3,12 @@ import 'dice.dart';
 
 class Sigil {
   final String id;
+  final String tag;
   final List<Modifier>? modifiers;
   final List<Action>? actions;
   final List<Dice>? dice;
 
-  const Sigil(this.id, this.modifiers, this.actions, this.dice);
+  const Sigil(this.id, this.tag, this.modifiers, this.actions, this.dice);
 }
 
 class Modifier {
@@ -30,6 +31,9 @@ const Map<String, Sigil> sigils = {
   "viscerblade": Sigils.viscerblade,
   "thorn_skinned": Sigils.thornSkinned,
   "crimson_gout": Sigils.crimsonGout,
+  "regenerative": Sigils.regenerative,
+  "wounded_shard": Sigils.woundedShard,
+  "skinned": Sigils.skinned,
 
   //Ferathrope
   "echolocation": Sigils.echolocation,
@@ -61,44 +65,166 @@ const Map<String, Sigil> sigils = {
 };
 
 class Sigils {
-  static const Sigil mystic = Sigil("mystic", [], [], []);
-  static const Sigil muscular = Sigil("muscular", [], [], []);
-  static const Sigil fastHands = Sigil("fast_hands", [], [], []);
-  static const Sigil perceptive = Sigil("perceptive", [], [], []);
-  static const Sigil hardy = Sigil("hardy", [], [], []);
-  static const Sigil pretender = Sigil("pretender", [], [], []);
+  static const Sigil mystic = Sigil("mystic", "common", [], [], []);
+  static const Sigil muscular = Sigil("muscular", "common", [], [], []);
+  static const Sigil fastHands = Sigil("fast_hands", "common", [], [], []);
+  static const Sigil perceptive = Sigil("perceptive", "common", [], [], []);
+  static const Sigil hardy = Sigil("hardy", "common", [], [], []);
+  static const Sigil pretender = Sigil("pretender", "common", [], [], []);
 
   //Flash Construct
-  static const Sigil viscerblade = Sigil("viscerblade", [], [], []);
-  static const Sigil thornSkinned = Sigil("thorn_skinned", [], [], []);
-  static const Sigil crimsonGout = Sigil("crimson_gout", [], [], []);
+  static const Sigil viscerblade = Sigil(
+    "viscerblade",
+    "flash_construct",
+    [],
+    [],
+    [],
+  );
+  static const Sigil thornSkinned = Sigil(
+    "thorn_skinned",
+    "flash_construct",
+    [],
+    [],
+    [],
+  );
+  static const Sigil crimsonGout = Sigil(
+    "crimson_gout",
+    "flash_construct",
+    [],
+    [],
+    [],
+  );
+  static const Sigil regenerative = Sigil(
+    "regenerative",
+    "flash_construct",
+    [],
+    [],
+    [],
+  );
+  static const Sigil woundedShard = Sigil(
+    "wounded_shard",
+    "flash_construct",
+    [],
+    [],
+    [],
+  );
+  static const Sigil skinned = Sigil("skinned", "flash_construct", [], [], []);
 
   //Ferathrope
-  static const Sigil echolocation = Sigil("echolocation", [], [], []);
-  static const Sigil pitOrgan = Sigil("pit_organ", [], [], []);
-  static const Sigil venomousBite = Sigil("venomous_bite", [], [], []);
-  static const Sigil emberFlesh = Sigil("ember_flesh", [], [], []);
+  static const Sigil echolocation = Sigil(
+    "echolocation",
+    "ferathrope",
+    [],
+    [],
+    [],
+  );
+  static const Sigil pitOrgan = Sigil("pit_organ", "ferathrope", [], [], []);
+  static const Sigil venomousBite = Sigil(
+    "venomous_bite",
+    "ferathrope",
+    [],
+    [],
+    [],
+  );
+  static const Sigil emberFlesh = Sigil(
+    "ember_flesh",
+    "ferathrope",
+    [],
+    [],
+    [],
+  );
 
   //Vampire
-  static const Sigil charming = Sigil("charming", [], [], []);
-  static const Sigil predatorSense = Sigil("predator_sense", [], [], []);
+  static const Sigil charming = Sigil("charming", "vampire", [], [], []);
+  static const Sigil predatorSense = Sigil(
+    "predator_sense",
+    "vampire",
+    [],
+    [],
+    [],
+  );
 
   //Witch
-  static const Sigil bookOfSecrets = Sigil("book_of_secrets", [], [], []);
-  static const Sigil bookOfSpikes = Sigil("book_of_spikes", [], [], []);
-  static const Sigil bookOfMirrors = Sigil("book_of_mirrors", [], [], []);
+  static const Sigil bookOfSecrets = Sigil(
+    "book_of_secrets",
+    "witch",
+    [],
+    [],
+    [],
+  );
+  static const Sigil bookOfSpikes = Sigil(
+    "book_of_spikes",
+    "witch",
+    [],
+    [],
+    [],
+  );
+  static const Sigil bookOfMirrors = Sigil(
+    "book_of_mirrors",
+    "witch",
+    [],
+    [],
+    [],
+  );
 
   // Blight Weaver
-  static const Sigil feverish = Sigil("feverish", [], [], []);
-  static const Sigil rotShaper = Sigil("rot_shaper", [], [], []);
-  static const Sigil fleshBender = Sigil("flesh_bender", [], [], []);
+  static const Sigil feverish = Sigil("feverish", "blight_weaver", [], [], []);
+  static const Sigil rotShaper = Sigil(
+    "rot_shaper",
+    "blight_weaver",
+    [],
+    [],
+    [],
+  );
+  static const Sigil fleshBender = Sigil(
+    "flesh_bender",
+    "blight_weaver",
+    [],
+    [],
+    [],
+  );
 
   // Hunter
-  static const Sigil painMaster = Sigil("pain_master", [], [], []);
-  static const Sigil hollowSouled = Sigil("hollowsouled", [], [], []);
-  //
-  static const Sigil hummerSworn = Sigil("hummer_sworn", [], [], []);
-  static const Sigil daggerMaster = Sigil("dagger_master", [], [], []);
-  static const Sigil rapierMaster = Sigil("rapier_master", [], [], []);
-  static const Sigil masterOfWeaves = Sigil("master_of_weaves", [], [], []);
+  static const Sigil painMaster = Sigil(
+    "pain_master",
+    "hunter_orden",
+    [],
+    [],
+    [],
+  );
+  static const Sigil hollowSouled = Sigil(
+    "hollowsouled",
+    "hunter_orden",
+    [],
+    [],
+    [],
+  );
+  static const Sigil hummerSworn = Sigil(
+    "hummer_sworn",
+    "hunter_orden",
+    [],
+    [],
+    [],
+  );
+  static const Sigil daggerMaster = Sigil(
+    "dagger_master",
+    "hunter",
+    [],
+    [],
+    [],
+  );
+  static const Sigil rapierMaster = Sigil(
+    "rapier_master",
+    "hunter",
+    [],
+    [],
+    [],
+  );
+  static const Sigil masterOfWeaves = Sigil(
+    "master_of_weaves",
+    "hunter",
+    [],
+    [],
+    [],
+  );
 }

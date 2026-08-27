@@ -17,11 +17,21 @@ class MainVM extends EventProcessor<MainState> {
         MainState(
           mc: mcRepo.latestState,
           origins: originsRepo.latestState,
-          sigils: sigilsRepo.latestState,
+          sigilSelection:
+              originsRepo
+                  .latestState[mcRepo.latestState.originId]
+                  ?.sigilSelection ??
+              [],
         ),
       ) {
     mcRepo.stream.listen(
-      (data) => update(latestState.copyWith(mc: data)),
+      (data) => update(
+        latestState.copyWith(
+          mc: data,
+          sigilSelection:
+              originsRepo.latestState[data.originId]?.sigilSelection ?? [],
+        ),
+      ),
       onError: (error) => print('Error: $error'),
       onDone: () => print('Stream closed'),
       cancelOnError: false,
@@ -33,6 +43,7 @@ class MainVM extends EventProcessor<MainState> {
     switch (event.id) {
       case "origin_selected":
         mcRepo.eventHandler(event);
+
         return true;
       case "sigil_selected":
         mcRepo.eventHandler(event);
@@ -41,28 +52,39 @@ class MainVM extends EventProcessor<MainState> {
         return false;
     }
   }
+
+  List<SigilSelection> getSigilSelection() {
+    String originId = mcRepo.latestState.originId;
+    Origin? origin = originsRepo.latestState[originId];
+
+    if (origin != null) {
+      return origin.sigilSelection;
+    } else {
+      return [];
+    }
+  }
 }
 
 class MainState {
   final MC mc;
   final Map<String, Origin> origins;
-  final Map<String, Sigil> sigils;
+  final List<SigilSelection> sigilSelection;
 
   const MainState({
     required this.mc,
     required this.origins,
-    required this.sigils,
+    required this.sigilSelection,
   });
 
   MainState copyWith({
     MC? mc,
     Map<String, Origin>? origins,
-    Map<String, Sigil>? sigils,
+    List<SigilSelection>? sigilSelection,
   }) {
     return MainState(
       mc: mc ?? this.mc,
       origins: origins ?? this.origins,
-      sigils: sigils ?? this.sigils,
+      sigilSelection: sigilSelection ?? this.sigilSelection,
     );
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:snd/repo/pojo/origins.dart';
-import 'package:snd/repo/pojo/sigil.dart';
 import 'package:snd/repo/pojo/mc.dart';
 import 'base/page.dart';
 import 'package:snd/vm/main/main_vm.dart';
@@ -22,7 +21,7 @@ class HomePage extends MyPage<MainState> {
       return Text("NO DATA");
     }
     final List<String> originEntries = data.origins.keys.toList();
-    final List<String> sigilEntries = data.sigils.keys.toList();
+    final List<SigilSelection> sigilSelectionEntries = data.sigilSelection;
     final MC mc = data.mc;
 
     return Column(
@@ -61,32 +60,18 @@ class HomePage extends MyPage<MainState> {
         SizedBox(height: 12), // Add spacing
         Center(
           child: SizedBox(
-            width: 1200,
+            height: 400,
             child: Container(
               color: Colors.deepPurple,
-              child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 10, // Number of columns
-                  // crossAxisSpacing: 10,
-                  // mainAxisSpacing: 10,
-                  childAspectRatio: 1.0, // Width/height ratio
-                ),
-                padding: const EdgeInsets.all(8),
-                // scrollDirection: Axis.horizontal,
-                shrinkWrap: true,
-                itemCount: sigilEntries.length,
+              child: ListView.builder(
+                scrollDirection: Axis.vertical,
+                itemCount: sigilSelectionEntries.length,
                 itemBuilder: (BuildContext context, int index) {
-                  final String sigilId = sigilEntries[index];
-                  final Sigil? sigil = snap.data?.sigils[sigilId];
-                  if (sigilId.isNotEmpty && sigil != null) {
-                    return SigilGridItem(
-                      sigilId: sigilId,
-                      sigil: sigil,
-                      selected: mc.sigils.contains(sigilId),
-                      eventHandler: eventHandler,
-                    );
-                  }
-                  return Text("Can't read entity with index: $index");
+                  return SigilSelectionItem(
+                    sigilSelection: sigilSelectionEntries[index],
+                    selectedSigils: mc.sigils,
+                    eventHandler: eventHandler,
+                  );
                 },
               ),
             ),
@@ -198,51 +183,66 @@ class OriginListItem extends StatelessWidget {
   }
 }
 
-class SigilGridItem extends StatelessWidget {
-  final String sigilId;
-  final Sigil sigil;
-  final bool selected;
+class SigilSelectionItem extends StatelessWidget {
+  final List<String> selectedSigils;
+  final SigilSelection sigilSelection;
   final bool Function(Event event) eventHandler;
 
-  const SigilGridItem({
+  const SigilSelectionItem({
     super.key,
-    required this.sigilId,
-    required this.sigil,
-    required this.selected,
+    required this.selectedSigils,
+    required this.sigilSelection,
     required this.eventHandler,
   });
 
   @override
   build(BuildContext context) {
     // List<String> primaryStatIds = origin.primaryStats.keys.toList();
-    final textTheme = Theme.of(context).textTheme;
-    return UnconstrainedBox(
-      child: SizedBox(
-        height: 100,
-        width: 100,
-        child: GestureDetector(
-          onTap: () {
-            eventHandler(
-              Event("sigil_selected", params: {"sigil_id": sigilId}),
-            );
-          },
-          child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            elevation: selected ? 4 : 2,
-            color: selected ? Colors.orangeAccent : Colors.grey,
-            child: Center(
-              child: Text(
-                sigilId,
-                style: textTheme.labelLarge?.copyWith(
-                  backgroundColor: Colors.lightBlueAccent,
-                ),
-              ),
-            ),
-          ),
-        ),
+    // final textTheme = Theme.of(context).textTheme;
+    return SizedBox(
+      height: 80,
+      child: ListView.builder(
+        padding: const EdgeInsets.all(8),
+        scrollDirection: Axis.horizontal,
+        shrinkWrap: true,
+        itemCount: sigilSelection.sigilsToChooseFrom.length,
+        itemBuilder: (BuildContext context, int index) {
+          final String sigilId = sigilSelection.sigilsToChooseFrom[index];
+          return SizedBox(
+            width: 180,
+            child: Card(child: Center(child: Text(sigilId))),
+          );
+        },
       ),
     );
+
+    // UnconstrainedBox(
+    //   child: SizedBox(
+    //     height: 100,
+    //     width: 100,
+    //     child: GestureDetector(
+    //       onTap: () {
+    //         eventHandler(
+    //           Event("sigil_selected", params: {"sigil_id": sigilId}),
+    //         );
+    //       },
+    //       child: Card(
+    //         shape: RoundedRectangleBorder(
+    //           borderRadius: BorderRadius.circular(16),
+    //         ),
+    //         elevation: selected ? 4 : 2,
+    //         color: selected ? Colors.orangeAccent : Colors.grey,
+    //         child: Center(
+    //           child: Text(
+    //             sigilId,
+    //             style: textTheme.labelLarge?.copyWith(
+    //               backgroundColor: Colors.lightBlueAccent,
+    //             ),
+    //           ),
+    //         ),
+    //       ),
+    //     ),
+    //   ),
+    // );
   }
 }
