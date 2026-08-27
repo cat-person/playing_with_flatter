@@ -1,44 +1,41 @@
 import 'package:snd/event_processor/event_processor.dart';
+import 'package:snd/repo/mc_repo.dart';
 import 'package:snd/repo/origins_repo.dart';
 import 'package:snd/repo/sigils_repo.dart';
 import 'package:snd/event_processor/event.dart';
-import '../../repo/pojo/origins.dart';
-import '../../repo/pojo/sigil.dart';
+import 'package:snd/repo/pojo/origins.dart';
+import 'package:snd/repo/pojo/sigil.dart';
+import 'package:snd/repo/pojo/mc.dart';
 
 class MainVM extends EventProcessor<MainState> {
-  MainVM(OriginsRepo originsRepo, SigilsRepo sigilsRepo, {super.proxy})
+  final MCRepo mcRepo;
+  final OriginsRepo originsRepo;
+  final SigilsRepo sigilsRepo;
+
+  MainVM(this.mcRepo, this.originsRepo, this.sigilsRepo, {super.proxy})
     : super(
         MainState(
+          mc: mcRepo.latestState,
           origins: originsRepo.latestState,
-          selectedOrigin: "",
           sigils: sigilsRepo.latestState,
         ),
-      );
+      ) {
+    mcRepo.stream.listen(
+      (data) => update(latestState.copyWith(mc: data)),
+      onError: (error) => print('Error: $error'),
+      onDone: () => print('Stream closed'),
+      cancelOnError: false,
+    );
+  }
 
   @override
   bool internalEventHandler(Event event) {
     switch (event.id) {
       case "origin_selected":
-        update(
-          latestState.copyWith(
-            selectedOrigin: event.params["origin_id"] as String,
-          ),
-        );
+        mcRepo.eventHandler(event);
         return true;
       case "sigil_selected":
-        String sigilId = event.params["sigil_id"] as String;
-
-        int sigilIdIdx = latestState.selectedSigils.indexOf(sigilId);
-        List<String> newSelectedSigils = (sigilIdIdx == -1)
-            ? [...latestState.selectedSigils, sigilId]
-            : [
-                ...latestState.selectedSigils.getRange(0, sigilIdIdx),
-                ...latestState.selectedSigils.getRange(
-                  sigilIdIdx,
-                  latestState.selectedSigils.length,
-                ),
-              ];
-        update(latestState.copyWith(selectedSigils: newSelectedSigils));
+        mcRepo.eventHandler(event);
         return true;
       default:
         return false;
@@ -47,29 +44,25 @@ class MainVM extends EventProcessor<MainState> {
 }
 
 class MainState {
+  final MC mc;
   final Map<String, Origin> origins;
-  final String selectedOrigin;
   final Map<String, Sigil> sigils;
-  final List<String> selectedSigils;
 
   const MainState({
+    required this.mc,
     required this.origins,
     required this.sigils,
-    this.selectedOrigin = "none",
-    this.selectedSigils = const [],
   });
 
   MainState copyWith({
+    MC? mc,
     Map<String, Origin>? origins,
     Map<String, Sigil>? sigils,
-    String? selectedOrigin,
-    List<String>? selectedSigils,
   }) {
     return MainState(
+      mc: mc ?? this.mc,
       origins: origins ?? this.origins,
       sigils: sigils ?? this.sigils,
-      selectedOrigin: selectedOrigin ?? this.selectedOrigin,
-      selectedSigils: selectedSigils ?? this.selectedSigils,
     );
   }
 }

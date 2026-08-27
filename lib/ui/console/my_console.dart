@@ -64,7 +64,6 @@ class MyConsoleWidget extends StatelessWidget {
 
   @override
   build(BuildContext context) {
-    // final textTheme = Theme.of(context).textTheme;
     return Container(
       color: Colors.black87,
       child: StreamBuilder<List<TextSpan>>(

@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:snd/event.dart';
+import 'package:snd/event_processor/event.dart';
 
 abstract class VM<TState> {
   final StreamController<TState> _streamController;

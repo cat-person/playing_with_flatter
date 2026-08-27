@@ -1,5 +1,5 @@
 import 'dice.dart';
-import 'hero.dart';
+import 'mc.dart';
 
 abstract class Action {
   bool canAddTarget(Target target);
@@ -15,7 +15,7 @@ abstract class Action {
 }
 
 class ZombiHealAction extends Action {
-  Hero self;
+  MC self;
   List<Target> targets = [];
   List<Dice> payed = [];
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:snd/repo/mc_repo.dart';
 import 'package:snd/repo/origins_repo.dart';
 import 'package:snd/repo/sigils_repo.dart';
 import 'package:snd/ui/console/my_console.dart';
@@ -17,10 +18,16 @@ class MyApp extends StatelessWidget {
     ConsoleProxy consoleProxy = ConsoleProxy();
     ConsoleVM consoleVM = ConsoleVM(consoleProxy);
 
+    MCRepo mcRepo = MCRepo();
     OriginsRepo originsRepo = OriginsRepo(proxy: consoleProxy);
     SigilsRepo sigilsRepo = SigilsRepo(proxy: consoleProxy);
 
-    MainVM mainVM = MainVM(originsRepo, sigilsRepo, proxy: consoleProxy);
+    MainVM mainVM = MainVM(
+      mcRepo,
+      originsRepo,
+      sigilsRepo,
+      proxy: consoleProxy,
+    );
     return MaterialApp(
       home: Column(
         children: [

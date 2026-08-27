@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:snd/repo/pojo/origins.dart';
 import 'package:snd/repo/pojo/sigil.dart';
+import 'package:snd/repo/pojo/mc.dart';
 import 'base/page.dart';
 import 'package:snd/vm/main/main_vm.dart';
 import 'package:snd/event_processor/event.dart';
@@ -22,20 +23,15 @@ class HomePage extends MyPage<MainState> {
     }
     final List<String> originEntries = data.origins.keys.toList();
     final List<String> sigilEntries = data.sigils.keys.toList();
-    final String selectedOrigin = data.selectedOrigin;
-    final List<String> selectedSigils = data.selectedSigils;
-    final textTheme = Theme.of(context).textTheme;
+    final MC mc = data.mc;
 
     return Column(
       children: [
         SizedBox(height: 12), // Add spacing
-        Text(
-          "Selected origin: ${snap.data?.selectedOrigin}",
-          style: textTheme.headlineLarge,
-        ),
+        MCWidget(mc),
         SizedBox(height: 12), // Add spacing
         SizedBox(
-          height: 220,
+          height: 180,
           child: Center(
             child: Container(
               color: Colors.red,
@@ -51,7 +47,7 @@ class HomePage extends MyPage<MainState> {
                     return OriginListItem(
                       originId: originId,
                       origin: origin,
-                      selected: originId == selectedOrigin,
+                      selected: originId == mc.origin,
                       eventHandler: eventHandler,
                     );
                   }
@@ -86,7 +82,7 @@ class HomePage extends MyPage<MainState> {
                     return SigilGridItem(
                       sigilId: sigilId,
                       sigil: sigil,
-                      selected: selectedSigils.contains(sigilId),
+                      selected: mc.sigils.contains(sigilId),
                       eventHandler: eventHandler,
                     );
                   }
@@ -97,6 +93,37 @@ class HomePage extends MyPage<MainState> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class MCWidget extends StatelessWidget {
+  final MC mc;
+
+  const MCWidget(this.mc, {super.key});
+
+  @override
+  build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    return SizedBox(
+      height: 160,
+      width: 1200,
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        color: Colors.blue[900],
+        child: Column(
+          children: [
+            Text(
+              "Hero: ${mc.origin}",
+              style: textTheme.titleLarge?.copyWith(color: Colors.red),
+            ),
+            Text(
+              mc.sigils.join(', '),
+              style: textTheme.titleSmall?.copyWith(color: Colors.deepOrange),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -121,7 +148,7 @@ class OriginListItem extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     return UnconstrainedBox(
       child: SizedBox(
-        height: 200,
+        height: 160,
         width: 200,
         child: GestureDetector(
           onTap: () {
@@ -139,7 +166,7 @@ class OriginListItem extends StatelessWidget {
               children: [
                 Text(originId, style: textTheme.headlineMedium),
                 SizedBox(
-                  height: 120,
+                  height: 100,
                   width: 200,
                   child: ListView.builder(
                     padding: const EdgeInsets.all(8),
