@@ -1,0 +1,104 @@
+[
+  {
+    "id": "flash_construct",
+    "primaryStats": {
+      "mst": 4,
+      "str": 7,
+      "spd": 5,
+      "pcp": 4,
+      "int": 4,
+      "con": 7
+    },
+    "sigilSelectors": [
+      { "sigils": [], "howMany": 1 },
+      { "sigils": [], "howMany": 1 }
+    ],
+    "actions": [],
+    "dice": []
+  },
+  {
+    "id": "ferathrope",
+    "primaryStats": {
+      "mst": 4,
+      "str": 5,
+      "spd": 5,
+      "pcp": 5,
+      "int": 4,
+      "con": 5
+    },
+    "sigilSelectors": [
+      { "sigils": [], "howMany": 1 },
+      { "sigils": [], "howMany": 1 }
+    ],
+    "actions": [],
+    "dice": []
+  },
+  {
+    "id": "vampire",
+    "primaryStats": {
+      "mst": 5,
+      "str": 5,
+      "spd": 6,
+      "pcp": 6,
+      "int": 6,
+      "con": 4
+    },
+    "sigilSelectors": [
+      { "sigils": [], "howMany": 1 },
+      { "sigils": [], "howMany": 1 }
+    ],
+    "actions": [],
+    "dice": []
+  },
+  {
+    "id": "witch",
+    "primaryStats": {
+      "mst": 6,
+      "str": 4,
+      "spd": 4,
+      "pcp": 6,
+      "int": 6,
+      "con": 4
+    },
+    "sigilSelectors": [
+      { "sigils": [], "howMany": 1 },
+      { "sigils": [], "howMany": 1 }
+    ],
+    "actions": [],
+    "dice": []
+  },
+  {
+    "id": "blight_weaver",
+    "primaryStats": {
+      "mst": 7,
+      "str": 4,
+      "spd": 4,
+      "pcp": 5,
+      "int": 7,
+      "con": 4
+    },
+    "sigilSelectors": [
+      { "sigils": [], "howMany": 1 },
+      { "sigils": [], "howMany": 1 }
+    ],
+    "actions": [],
+    "dice": []
+  },
+  {
+    "id": "hunter",
+    "primaryStats": {
+      "mst": 4,
+      "str": 4,
+      "spd": 4,
+      "pcp": 6,
+      "int": 6,
+      "con": 4
+    },
+    "sigilSelectors": [
+      { "sigils": [], "howMany": 1 },
+      { "sigils": [], "howMany": 1 }
+    ],
+    "actions": [],
+    "dice": []
+  }
+]

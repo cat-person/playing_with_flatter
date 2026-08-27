@@ -1,0 +1,44 @@
+[
+  {
+    "id": "mystic",
+    "aplicable": {},
+    "modifiers": [{}, {}, {}],
+    "actions": [],
+    "dice": []
+  },
+  {
+    "id": "muscular",
+    "aplicable": {},
+    "modifiers": [{}, {}, {}],
+    "actions": [],
+    "dice": []
+  },
+  {
+    "id": "fast_hands",
+    "aplicable": {},
+    "modifiers": [{}, {}, {}],
+    "actions": [],
+    "dice": []
+  },
+  {
+    "id": "perceptive",
+    "aplicable": {},
+    "modifiers": [{}, {}, {}],
+    "actions": [],
+    "dice": []
+  },
+  {
+    "id": "hardy",
+    "aplicable": {},
+    "modifiers": [{}, {}, {}],
+    "actions": [],
+    "dice": []
+  },
+  {
+    "id": "pretender",
+    "aplicable": {},
+    "modifiers": [{}, {}, {}],
+    "actions": [],
+    "dice": []
+  }
+]
