@@ -17,13 +17,7 @@ class MCRepo extends EventProcessor<MC> {
         int sigilIdIdx = latestState.sigils.indexOf(sigilId);
         List<String> updatedSigils = (sigilIdIdx == -1)
             ? [...latestState.sigils, sigilId]
-            : [
-                ...latestState.sigils.getRange(0, sigilIdIdx),
-                ...latestState.sigils.getRange(
-                  sigilIdIdx + 1,
-                  latestState.sigils.length,
-                ),
-              ];
+            : [...latestState.sigils.getRange(0, sigilIdIdx), ...latestState.sigils.getRange(sigilIdIdx + 1, latestState.sigils.length)];
 
         update(latestState.copyWith(sigils: updatedSigils));
         return true;

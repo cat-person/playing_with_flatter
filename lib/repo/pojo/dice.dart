@@ -13,9 +13,18 @@ class DiceRoll {
 class Dice {
   String statId;
 
-  Dice({required this.statId});
+  Dice(this.statId);
 
   roll(Random random) {
     return random.nextInt(6);
   }
+}
+
+class Dices {
+  static const String mysticism = "mst";
+  static const String strength = "str";
+  static const String speed = "spd";
+  static const String perception = "pcp";
+  static const String constitution = "con";
+  static const String intelligence = "int";
 }

@@ -7,10 +7,7 @@ class MC {
   MC({this.originId = 'none', this.sigils = const []});
 
   MC copyWith({String? originId, List<String>? sigils}) {
-    return MC(
-      originId: originId ?? this.originId,
-      sigils: sigils ?? this.sigils,
-    );
+    return MC(originId: originId ?? this.originId, sigils: sigils ?? this.sigils);
   }
 
   Map<String, int> get stats {

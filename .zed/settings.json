@@ -1,0 +1,13 @@
+{
+  "format_on_save": "on",
+  "show_wrap_guides": false,
+  "preferred_line_length": 150,
+  "soft_wrap": "prefer_line",
+  "lsp": {
+    "dart": {
+      "settings": {
+        "lineLength": 150,
+      },
+    },
+  },
+}

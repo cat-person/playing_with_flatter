@@ -22,20 +22,11 @@ class MyApp extends StatelessWidget {
     OriginsRepo originsRepo = OriginsRepo(proxy: consoleProxy);
     SigilsRepo sigilsRepo = SigilsRepo(proxy: consoleProxy);
 
-    MainVM mainVM = MainVM(
-      mcRepo,
-      originsRepo,
-      sigilsRepo,
-      proxy: consoleProxy,
-    );
+    MainVM mainVM = MainVM(mcRepo, originsRepo, sigilsRepo, proxy: consoleProxy);
     return MaterialApp(
       home: Column(
         children: [
-          HomePage(
-            stream: mainVM.stream,
-            initialData: mainVM.latestState,
-            eventHandler: mainVM.eventHandler,
-          ),
+          HomePage(stream: mainVM.stream, initialData: mainVM.latestState, eventHandler: mainVM.eventHandler),
           Spacer(),
           MyConsoleWidget(consoleVM.stream, [], consoleVM.eventHandler),
         ],

@@ -13,14 +13,7 @@ Map<String, Origin> defaultOrigins = {
       PrimaryStat.constitution: 7,
     },
     [
-      SigilSelection([
-        "viscerblade",
-        "thorn_skinned",
-        "crimson_gout",
-        "regenerative",
-        "wounded_shard",
-        "skinned",
-      ], 2),
+      SigilSelection(["viscerblade", "thorn_skinned", "crimson_gout", "regenerative", "wounded_shard", "skinned"], 2),
     ],
   ),
   // Const ++ Str + myst - per - char -
@@ -69,11 +62,7 @@ Map<String, Origin> defaultOrigins = {
       PrimaryStat.intelligence: 7,
       PrimaryStat.constitution: 3,
     },
-    [
-      selectByTag("blight_weaver", 1),
-      selectByTag("blight_weaver", 1),
-      selectByTag("common", 1),
-    ],
+    [selectByTag("blight_weaver", 1), selectByTag("blight_weaver", 1), selectByTag("common", 1)],
   ),
   // Const ++ Str + myst - per - char -
   "hunter": Origin(
@@ -85,11 +74,7 @@ Map<String, Origin> defaultOrigins = {
       PrimaryStat.intelligence: 4,
       PrimaryStat.constitution: 4,
     },
-    [
-      selectByTag("hunter_orden", 1),
-      selectByTag("hunter", 1),
-      selectByTag("common", 2),
-    ],
+    [selectByTag("hunter_orden", 1), selectByTag("hunter", 1), selectByTag("common", 2)],
   ),
 };
 
@@ -99,12 +84,7 @@ class Origin {
   final List<String>? actions;
   final List<String>? dice;
 
-  const Origin(
-    this.primaryStats,
-    this.sigilSelection, {
-    this.actions = const [],
-    this.dice = const [],
-  });
+  const Origin(this.primaryStats, this.sigilSelection, {this.actions = const [], this.dice = const []});
 }
 
 class SigilSelection {
@@ -115,10 +95,7 @@ class SigilSelection {
 }
 
 SigilSelection selectByTag(String tag, int howMany) {
-  List<String> selection = sigils.values
-      .where((sigil) => sigil.tag == tag)
-      .map((sigil) => sigil.id)
-      .toList();
+  List<String> selection = sigils.values.where((sigil) => sigil.tag == tag).map((sigil) => sigil.id).toList();
 
   return SigilSelection(selection, howMany);
 }

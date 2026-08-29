@@ -6,12 +6,7 @@ import 'package:snd/vm/main/main_vm.dart';
 import 'package:snd/event_processor/event.dart';
 
 class HomePage extends MyPage<MainState> {
-  const HomePage({
-    super.key,
-    required super.stream,
-    required super.initialData,
-    required super.eventHandler,
-  });
+  const HomePage({super.key, required super.stream, required super.initialData, required super.eventHandler});
 
   @override
   Widget build(BuildContext context, AsyncSnapshot<MainState> snap) {
@@ -43,12 +38,7 @@ class HomePage extends MyPage<MainState> {
                   final String originId = originEntries[index];
                   final Origin? origin = snap.data?.origins[originId];
                   if (originId.isNotEmpty && origin != null) {
-                    return OriginListItem(
-                      originId: originId,
-                      origin: origin,
-                      selected: originId == mc.originId,
-                      eventHandler: eventHandler,
-                    );
+                    return OriginListItem(originId: originId, origin: origin, selected: originId == mc.originId, eventHandler: eventHandler);
                   }
                   return Text("Can't read entity with index: $index");
                 },
@@ -60,18 +50,14 @@ class HomePage extends MyPage<MainState> {
         SizedBox(height: 12), // Add spacing
         Center(
           child: SizedBox(
-            height: 400,
+            height: 240,
             child: Container(
               color: Colors.deepPurple,
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
                 itemCount: sigilSelectionEntries.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return SigilSelectionItem(
-                    sigilSelection: sigilSelectionEntries[index],
-                    selectedSigils: mc.sigils,
-                    eventHandler: eventHandler,
-                  );
+                  return SigilSelectionItem(sigilSelection: sigilSelectionEntries[index], selectedSigils: mc.sigils, eventHandler: eventHandler);
                 },
               ),
             ),
@@ -100,19 +86,11 @@ class MCWidget extends StatelessWidget {
         child: Center(
           child: Column(
             children: [
-              Text(
-                "Hero: ${mc.originId}",
-                style: textTheme.titleLarge?.copyWith(color: Colors.red[200]),
-              ),
-              Text(
-                mc.sigils.join(', '),
-                style: textTheme.titleSmall?.copyWith(
-                  color: Colors.deepOrange[200],
-                ),
-              ),
+              Text("Hero: ${mc.originId}", style: textTheme.titleLarge?.copyWith(color: Colors.red[200])),
+              Text(mc.sigils.join(', '), style: textTheme.titleSmall?.copyWith(color: Colors.deepOrange[200])),
               SizedBox(
                 height: 160,
-                width: 400,
+                width: 240,
                 child: ListView.builder(
                   padding: const EdgeInsets.all(8),
                   itemCount: mc.stats.length,
@@ -120,12 +98,7 @@ class MCWidget extends StatelessWidget {
                     final String statId = statKeys[index];
                     final int? statValue = mc.stats[statId];
                     if (statId.isNotEmpty && statValue != null) {
-                      return Text(
-                        "$statId: $statValue",
-                        style: textTheme.titleSmall?.copyWith(
-                          color: Colors.grey[200],
-                        ),
-                      );
+                      return Text("$statId: $statValue", style: textTheme.titleSmall?.copyWith(color: Colors.grey[200]));
                     }
                     return Text("Can't read stat with index: $index");
                   },
@@ -145,13 +118,7 @@ class OriginListItem extends StatelessWidget {
   final bool selected;
   final bool Function(Event event) eventHandler;
 
-  const OriginListItem({
-    super.key,
-    required this.originId,
-    required this.origin,
-    required this.selected,
-    required this.eventHandler,
-  });
+  const OriginListItem({super.key, required this.originId, required this.origin, required this.selected, required this.eventHandler});
 
   @override
   build(BuildContext context) {
@@ -163,21 +130,14 @@ class OriginListItem extends StatelessWidget {
         width: 200,
         child: GestureDetector(
           onTap: () {
-            eventHandler(
-              Event("origin_selected", params: {"origin_id": originId}),
-            );
+            eventHandler(Event("origin_selected", params: {"origin_id": originId}));
           },
           child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             elevation: 2,
             color: selected ? Colors.blue : Colors.blueGrey,
             child: Center(
-              child: Text(
-                originId,
-                style: textTheme.titleLarge?.copyWith(color: Colors.white),
-              ),
+              child: Text(originId, style: textTheme.titleLarge?.copyWith(color: Colors.white)),
             ),
           ),
         ),
@@ -191,12 +151,7 @@ class SigilSelectionItem extends StatelessWidget {
   final SigilSelection sigilSelection;
   final bool Function(Event event) eventHandler;
 
-  const SigilSelectionItem({
-    super.key,
-    required this.selectedSigils,
-    required this.sigilSelection,
-    required this.eventHandler,
-  });
+  const SigilSelectionItem({super.key, required this.selectedSigils, required this.sigilSelection, required this.eventHandler});
 
   @override
   build(BuildContext context) {
@@ -213,8 +168,14 @@ class SigilSelectionItem extends StatelessWidget {
           final String sigilId = sigilSelection.sigilsToChooseFrom[index];
           return SizedBox(
             width: 200,
-            child: Card(
-              child: Center(child: Text(sigilId, style: textTheme.titleLarge)),
+            child: GestureDetector(
+              onTap: () {
+                eventHandler(Event("sigil_selected", params: {"sigil_id": sigilId}));
+              },
+              child: Card(
+                color: selectedSigils.contains(sigilId) ? Colors.deepOrange : Colors.grey,
+                child: Center(child: Text(sigilId, style: textTheme.titleLarge)),
+              ),
             ),
           );
         },

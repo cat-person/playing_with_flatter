@@ -17,21 +17,11 @@ class MainVM extends EventProcessor<MainState> {
         MainState(
           mc: mcRepo.latestState,
           origins: originsRepo.latestState,
-          sigilSelection:
-              originsRepo
-                  .latestState[mcRepo.latestState.originId]
-                  ?.sigilSelection ??
-              [],
+          sigilSelection: originsRepo.latestState[mcRepo.latestState.originId]?.sigilSelection ?? [],
         ),
       ) {
     mcRepo.stream.listen(
-      (data) => update(
-        latestState.copyWith(
-          mc: data,
-          sigilSelection:
-              originsRepo.latestState[data.originId]?.sigilSelection ?? [],
-        ),
-      ),
+      (data) => update(latestState.copyWith(mc: data, sigilSelection: originsRepo.latestState[data.originId]?.sigilSelection ?? [])),
       onError: (error) => print('Error: $error'),
       onDone: () => print('Stream closed'),
       cancelOnError: false,
@@ -70,21 +60,9 @@ class MainState {
   final Map<String, Origin> origins;
   final List<SigilSelection> sigilSelection;
 
-  const MainState({
-    required this.mc,
-    required this.origins,
-    required this.sigilSelection,
-  });
+  const MainState({required this.mc, required this.origins, required this.sigilSelection});
 
-  MainState copyWith({
-    MC? mc,
-    Map<String, Origin>? origins,
-    List<SigilSelection>? sigilSelection,
-  }) {
-    return MainState(
-      mc: mc ?? this.mc,
-      origins: origins ?? this.origins,
-      sigilSelection: sigilSelection ?? this.sigilSelection,
-    );
+  MainState copyWith({MC? mc, Map<String, Origin>? origins, List<SigilSelection>? sigilSelection}) {
+    return MainState(mc: mc ?? this.mc, origins: origins ?? this.origins, sigilSelection: sigilSelection ?? this.sigilSelection);
   }
 }

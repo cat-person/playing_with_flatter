@@ -1,26 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:snd/event_processor/event.dart';
 
-abstract class MyPage<TState>
-    extends StreamBuilderBase<TState, AsyncSnapshot<TState>> {
+abstract class MyPage<TState> extends StreamBuilderBase<TState, AsyncSnapshot<TState>> {
   final TState initialData;
   final bool Function(Event event) eventHandler;
 
-  const MyPage({
-    super.key,
-    required super.stream,
-    required this.initialData,
-    required this.eventHandler,
-  });
+  const MyPage({super.key, required super.stream, required this.initialData, required this.eventHandler});
 
   @override
-  AsyncSnapshot<TState> initial() => initialData == null
-      ? AsyncSnapshot<TState>.nothing()
-      : AsyncSnapshot<TState>.withData(ConnectionState.none, initialData);
+  AsyncSnapshot<TState> initial() =>
+      initialData == null ? AsyncSnapshot<TState>.nothing() : AsyncSnapshot<TState>.withData(ConnectionState.none, initialData);
 
   @override
-  AsyncSnapshot<TState> afterConnected(AsyncSnapshot<TState> current) =>
-      current.inState(ConnectionState.waiting);
+  AsyncSnapshot<TState> afterConnected(AsyncSnapshot<TState> current) => current.inState(ConnectionState.waiting);
 
   @override
   AsyncSnapshot<TState> afterData(AsyncSnapshot<TState> current, TState data) {
@@ -28,23 +20,13 @@ abstract class MyPage<TState>
   }
 
   @override
-  AsyncSnapshot<TState> afterError(
-    AsyncSnapshot<TState> current,
-    Object error,
-    StackTrace stackTrace,
-  ) {
-    return AsyncSnapshot<TState>.withError(
-      ConnectionState.active,
-      error,
-      stackTrace,
-    );
+  AsyncSnapshot<TState> afterError(AsyncSnapshot<TState> current, Object error, StackTrace stackTrace) {
+    return AsyncSnapshot<TState>.withError(ConnectionState.active, error, stackTrace);
   }
 
   @override
-  AsyncSnapshot<TState> afterDone(AsyncSnapshot<TState> current) =>
-      current.inState(ConnectionState.done);
+  AsyncSnapshot<TState> afterDone(AsyncSnapshot<TState> current) => current.inState(ConnectionState.done);
 
   @override
-  AsyncSnapshot<TState> afterDisconnected(AsyncSnapshot<TState> current) =>
-      current.inState(ConnectionState.none);
+  AsyncSnapshot<TState> afterDisconnected(AsyncSnapshot<TState> current) => current.inState(ConnectionState.none);
 }

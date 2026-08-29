@@ -5,12 +5,7 @@ import 'package:snd/event_processor/event.dart';
 
 class ConsoleVM extends EventProcessor<List<TextSpan>> {
   final EventProcessor<List<Event>> consoleRepo;
-  ConsoleVM(this.consoleRepo)
-    : super([
-        TextSpan(text: "Halo"),
-        TextSpan(text: "Bububu"),
-        TextSpan(text: "@.@"),
-      ]) {
+  ConsoleVM(this.consoleRepo) : super([TextSpan(text: "Halo"), TextSpan(text: "Bububu"), TextSpan(text: "@.@")]) {
     consoleRepo.stream.listen(
       (data) => update(
         data
@@ -19,19 +14,11 @@ class ConsoleVM extends EventProcessor<List<TextSpan>> {
                 children: [
                   TextSpan(
                     text: "${item.id}: ",
-                    style: TextStyle(
-                      color: Colors.lightBlue,
-                      decoration: TextDecoration.none,
-                      fontSize: 16,
-                    ),
+                    style: TextStyle(color: Colors.lightBlue, decoration: TextDecoration.none, fontSize: 16),
                   ),
                   TextSpan(
                     text: "${item.params}",
-                    style: TextStyle(
-                      color: Colors.lightGreen,
-                      decoration: TextDecoration.none,
-                      fontSize: 16,
-                    ),
+                    style: TextStyle(color: Colors.lightGreen, decoration: TextDecoration.none, fontSize: 16),
                   ),
                 ],
               ),
@@ -55,12 +42,7 @@ class MyConsoleWidget extends StatelessWidget {
   final List<TextSpan> initialData;
   final bool Function(Event event) eventHandler;
 
-  const MyConsoleWidget(
-    this.stream,
-    this.initialData,
-    this.eventHandler, {
-    super.key,
-  });
+  const MyConsoleWidget(this.stream, this.initialData, this.eventHandler, {super.key});
 
   @override
   build(BuildContext context) {
