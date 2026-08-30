@@ -4,7 +4,7 @@ import 'package:snd/repo/origins_repo.dart';
 import 'package:snd/repo/sigils_repo.dart';
 import 'package:snd/ui/console/my_console.dart';
 import 'vm/main/main_vm.dart';
-import 'package:snd/ui/home_page.dart';
+import 'package:snd/ui/home/page.dart';
 import 'package:snd/repo/console_repo.dart';
 
 void main() {
