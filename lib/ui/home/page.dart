@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+
 import 'package:snd/repo/pojo/origins.dart';
 import 'package:snd/repo/pojo/mc.dart';
-import 'base/page.dart';
+import 'package:snd/ui/base/page.dart';
 import 'package:snd/vm/main/main_vm.dart';
 import 'package:snd/event_processor/event.dart';
+import 'mc_widget.dart';
 
 class HomePage extends MyPage<MainState> {
   const HomePage({super.key, required super.stream, required super.initialData, required super.eventHandler});
@@ -22,7 +24,7 @@ class HomePage extends MyPage<MainState> {
     return Column(
       children: [
         SizedBox(height: 12), // Add spacing
-        MCWidget(mc),
+        MCWidget(mc, eventHandler),
         SizedBox(height: 12), // Add spacing
         SizedBox(
           height: 80,
@@ -64,50 +66,6 @@ class HomePage extends MyPage<MainState> {
           ),
         ),
       ],
-    );
-  }
-}
-
-class MCWidget extends StatelessWidget {
-  final MC mc;
-
-  const MCWidget(this.mc, {super.key});
-
-  @override
-  build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    final statKeys = mc.stats.keys.toList();
-    return SizedBox(
-      height: 240,
-      width: 1200,
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        color: Colors.blue[900],
-        child: Center(
-          child: Column(
-            children: [
-              Text("Hero: ${mc.originId}", style: textTheme.titleLarge?.copyWith(color: Colors.red[200])),
-              Text(mc.sigils.join(', '), style: textTheme.titleSmall?.copyWith(color: Colors.deepOrange[200])),
-              SizedBox(
-                height: 160,
-                width: 240,
-                child: ListView.builder(
-                  padding: const EdgeInsets.all(8),
-                  itemCount: mc.stats.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final String statId = statKeys[index];
-                    final int? statValue = mc.stats[statId];
-                    if (statId.isNotEmpty && statValue != null) {
-                      return Text("$statId: $statValue", style: textTheme.titleSmall?.copyWith(color: Colors.grey[200]));
-                    }
-                    return Text("Can't read stat with index: $index");
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

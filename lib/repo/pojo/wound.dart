@@ -8,15 +8,13 @@ class Wound {
 }
 
 class WoundDeck {
-  static const List<Wound> lightWound =  [
+  List<String> _deck;
 
-  ];
-  static const List<Wound> mediumWound = [];
-  static const List<Wound> deadlyWound = [];
+  WoundDeck(this._deck);
 
-  static const Wound lightWoundDef = Wound(0, WoundSource.any, "light", "Nothing");
-  static const Wound cut = Wound(1, WoundSource.laceration, "light", "Cfffudft");
-  static const Wound deepCut = Wound(2, WoundSource.laceration, "light", "Deep cut");
+  static const String tagLight = "wound_light";
+  static const String tagMedium = "wound_medium";
+  static const String tagSevere = "wound_severe";
 }
 
 class WoundSource {
@@ -26,4 +24,50 @@ class WoundSource {
   static const String puncture = "puncture";
   static const String fire = "fire";
   static const String blight = "blight";
+}
+
+class LightDeck extends WoundDeck {
+  LightDeck()
+    : super([
+        ...List<String>.filled(20, "light"),
+        ...List<String>.filled(4, "cut"),
+        ...List<String>.filled(4, "compound_laceration"),
+        ...List<String>.filled(4, "bruise"),
+        ...List<String>.filled(4, "bone_crack"),
+      ]);
+
+  void shuffle() {
+    _deck.shuffle();
+  }
+
+  List<String> draw(int howMany) {
+    // deck
+    List<String> result = _deck.skip(_deck.length - howMany).toList();
+    _deck = _deck.take(_deck.length - howMany).toList();
+    return result;
+  }
+}
+
+class LacerationSet {
+  static const Wound cut = Wound(1, WoundSource.laceration, "light", "Cut");
+  static const Wound compoundLaceration = Wound(2, WoundSource.laceration, "light", "Compund laceration");
+
+  static const Wound tendonRupture = Wound(3, WoundSource.laceration, "medium", "Tendrom cut");
+  static const Wound arterialRupture = Wound(3, WoundSource.laceration, "medium", "Deep cut");
+
+  static const Wound bisection = Wound(4, WoundSource.laceration, "light", "Bisection");
+}
+
+class BluntSet {
+  static const Wound bruise = Wound(1, WoundSource.blunt, "light", "Bruise");
+  static const Wound boneCrack = Wound(2, WoundSource.blunt, "light", "Bone Crack");
+
+  static const Wound muscleCrush = Wound(3, WoundSource.blunt, "light", "Muscle crush");
+  static const Wound compoundFracture = Wound(3, WoundSource.blunt, "light", "Compound Fracture");
+
+  static const Wound obliteration = Wound(4, WoundSource.blunt, "light", "Obliteration");
+}
+
+Wound get lightWoundDef {
+  return Wound(1, WoundSource.any, "light", "Scratch");
 }

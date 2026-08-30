@@ -1,5 +1,7 @@
 import 'dice.dart';
 import 'mc.dart';
+import 'wound.dart';
+import 'creature.dart';
 
 abstract class Action {
   bool canAddTarget(Target target);
@@ -13,6 +15,21 @@ abstract class Action {
   bool canPerform();
   List<Event> perform();
 }
+
+// abstract class Action {
+//   bool canAddTarget(Target target);
+//   List<Target> addTarget(Target targets);
+//   clearTargets();
+
+//   final Effect effect;
+
+//   bool canAddDice(Dice dice);
+//   List<Dice> addDice(Dice dice);
+//   clearDice();
+
+//   bool canPerform();
+//   bool perform();
+// }
 
 class ZombiHealAction extends Action {
   MC self;
@@ -80,3 +97,30 @@ abstract class Price {
 abstract class Target {}
 
 abstract class Event {}
+
+abstract class Effect {
+  bool apply(Target target);
+}
+
+abstract class DamageEffect extends Effect {
+  final Map<String, int> defWoundLevelToCount;
+
+  DamageEffect(this.defWoundLevelToCount);
+
+  List<Wound> filter(List<Wound> drawnCards);
+
+  bool apply(Target target);
+}
+
+class Punch extends DamageEffect {
+  Punch() : super({"light": 4});
+
+  List<Wound> filter(List<Wound> drawnCards) {
+    List<Wound> result = drawnCards.where((card) => ["any", "blunt"].contains(card.type)).toList();
+    return result;
+  }
+
+  bool apply(Target target) {
+    return false;
+  }
+}

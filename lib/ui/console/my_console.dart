@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:snd/event_processor/event_processor.dart';
 import 'package:snd/event_processor/event.dart';
 
