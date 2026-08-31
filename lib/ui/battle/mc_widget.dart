@@ -50,12 +50,12 @@ class MCWidget extends StatelessWidget {
                     return SizedBox(
                       height: 40,
                       width: 140,
-                      child: Card(
-                        color: Colors.tealAccent,
-                        child: GestureDetector(
-                          onTap: () {
-                            eventHandler(Event("perform", params: {"action_id": actionId}));
-                          },
+                      child: GestureDetector(
+                        onTap: () {
+                          eventHandler(Event("perform", params: {"action_id": actionId}));
+                        },
+                        child: Card(
+                          color: Colors.tealAccent,
                           child: Center(
                             child: Text(actionId, style: textTheme.labelLarge?.copyWith(color: Colors.blueAccent)),
                           ),

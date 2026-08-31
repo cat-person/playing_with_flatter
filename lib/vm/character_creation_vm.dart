@@ -5,17 +5,19 @@ import 'package:snd/repo/sigils_repo.dart';
 import 'package:snd/event_processor/event.dart';
 import 'package:snd/repo/pojo/origins.dart';
 import 'package:snd/repo/pojo/mc.dart';
+import 'package:snd/repo/pojo/sigil.dart';
 
-class MainVM extends EventProcessor<MainState> {
+class CharacterCreationVM extends EventProcessor<CharacterCreationState> {
   final MCRepo mcRepo;
   final OriginsRepo originsRepo;
   final SigilsRepo sigilsRepo;
 
-  MainVM(this.mcRepo, this.originsRepo, this.sigilsRepo, {super.proxy})
+  CharacterCreationVM(this.mcRepo, this.originsRepo, this.sigilsRepo, {super.proxy})
     : super(
-        MainState(
+        CharacterCreationState(
           mc: mcRepo.latestState,
-          origins: originsRepo.latestState,
+          originColleciton: originsRepo.latestState,
+          sigilCollection: sigilsRepo.latestState,
           sigilSelection: originsRepo.latestState[mcRepo.latestState.originId]?.sigilSelection ?? [],
         ),
       ) {
@@ -54,14 +56,25 @@ class MainVM extends EventProcessor<MainState> {
   }
 }
 
-class MainState {
+class CharacterCreationState {
   final MC mc;
-  final Map<String, Origin> origins;
   final List<SigilSelection> sigilSelection;
+  final Map<String, Origin> originColleciton;
+  final Map<String, Sigil> sigilCollection;
 
-  const MainState({required this.mc, required this.origins, required this.sigilSelection});
+  CharacterCreationState({required this.mc, required this.sigilSelection, required this.originColleciton, required this.sigilCollection});
 
-  MainState copyWith({MC? mc, Map<String, Origin>? origins, List<SigilSelection>? sigilSelection}) {
-    return MainState(mc: mc ?? this.mc, origins: origins ?? this.origins, sigilSelection: sigilSelection ?? this.sigilSelection);
+  CharacterCreationState copyWith({
+    MC? mc,
+    List<SigilSelection>? sigilSelection,
+    Map<String, Origin>? originColleciton,
+    Map<String, Sigil>? sigilCollection,
+  }) {
+    return CharacterCreationState(
+      mc: mc ?? this.mc,
+      sigilSelection: sigilSelection ?? this.sigilSelection,
+      originColleciton: originColleciton ?? this.originColleciton,
+      sigilCollection: sigilCollection ?? this.sigilCollection,
+    );
   }
 }
