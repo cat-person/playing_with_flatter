@@ -7,10 +7,29 @@ class Wound {
   const Wound(this.priority, this.type, this.severity, this.effect);
 }
 
+const Map<String, Wound> woundCollection = {
+  "light": AnySet.light,
+  "serious": AnySet.serious,
+  "severe": AnySet.severe,
+
+  "cut": LacerationSet.cut,
+  "compound_laceration": LacerationSet.compoundLaceration,
+  "tendon_rupture": LacerationSet.tendonRupture,
+  "arterial_rupture": LacerationSet.arterialRupture,
+  "bisection": LacerationSet.bisection,
+
+  "bruise": BluntSet.bruise,
+  "bone_crack": BluntSet.boneCrack,
+  "muscle_crush": BluntSet.muscleCrush,
+  "compound_fracture": BluntSet.compoundFracture,
+  "obliteration": BluntSet.obliteration,
+};
+
 class WoundDeck {
+  final String id;
   List<String> _deck;
 
-  WoundDeck(this._deck);
+  WoundDeck(this.id, this._deck);
 
   static const String tagLight = "wound_light";
   static const String tagMedium = "wound_medium";
@@ -28,7 +47,7 @@ class WoundSource {
 
 class LightDeck extends WoundDeck {
   LightDeck()
-    : super([
+    : super("wound_light", [
         ...List<String>.filled(20, "light"),
         ...List<String>.filled(4, "cut"),
         ...List<String>.filled(4, "compound_laceration"),
@@ -68,6 +87,8 @@ class BluntSet {
   static const Wound obliteration = Wound(4, WoundSource.blunt, "light", "Obliteration");
 }
 
-Wound get lightWoundDef {
-  return Wound(1, WoundSource.any, "light", "Scratch");
+class AnySet {
+  static const Wound light = Wound(1, WoundSource.blunt, "light", "Light");
+  static const Wound serious = Wound(2, WoundSource.blunt, "serious", "Serious");
+  static const Wound severe = Wound(3, WoundSource.blunt, "severe", "Severe");
 }

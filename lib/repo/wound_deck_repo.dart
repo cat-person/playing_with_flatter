@@ -2,13 +2,8 @@ import 'package:snd/repo/pojo/wound.dart';
 import 'package:snd/event_processor/event_processor.dart';
 import 'package:snd/event_processor/event.dart';
 
-class WoundDeckRepo extends EventProcessor<Map<String, WoundDeck>> {
-  final WoundDeck lightDeck;
-  final WoundDeck mediumDeck;
-  final WoundDeck severeDeck;
-
-  WoundDeckRepo({required this.lightDeck, required this.mediumDeck, required this.severeDeck, super.proxies})
-    : super({"light": WoundDeck([]), "medium": WoundDeck([]), "severe": WoundDeck([])});
+class WoundDeckRepo extends EventProcessor<WoundDeckState> {
+  WoundDeckRepo(super._latestState, {super.proxies});
 
   @override
   bool internalEventHandler(Event event) {
@@ -20,5 +15,17 @@ class WoundDeckRepo extends EventProcessor<Map<String, WoundDeck>> {
       default:
         return false;
     }
+  }
+}
+
+class WoundDeckState {
+  final List<String> drawnCards;
+  final Map<String, Wound> woundColleciton;
+  final Map<String, WoundDeck> deckColleciton;
+
+  WoundDeckState(this.deckColleciton, this.woundColleciton, this.drawnCards);
+
+  WoundDeckState copyWith({List<String>? drawnCards, Map<String, Wound>? woundColleciton, Map<String, WoundDeck>? deckColleciton}) {
+    return WoundDeckState(deckColleciton ?? this.deckColleciton, woundColleciton ?? this.woundColleciton, drawnCards ?? this.drawnCards);
   }
 }

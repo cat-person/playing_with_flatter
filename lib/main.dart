@@ -3,11 +3,13 @@ import 'package:snd/event_processor/event.dart';
 import 'package:snd/repo/mc_repo.dart';
 import 'package:snd/repo/origins_repo.dart';
 import 'package:snd/repo/sigils_repo.dart';
+import 'package:snd/repo/wound_deck_repo.dart';
 import 'package:snd/ui/battle/page.dart';
 import 'package:snd/ui/console/my_console.dart';
 import 'vm/battle_vm.dart';
 import 'vm/character_creation_vm.dart';
 import 'vm/home_vm.dart';
+import 'package:snd/repo/pojo/wound.dart';
 import 'vm/navigation_vm.dart';
 import 'package:snd/ui/home/page.dart';
 import 'package:snd/ui/character_creation/page.dart';
@@ -27,10 +29,14 @@ class MyApp extends StatelessWidget {
     MCRepo mcRepo = MCRepo(proxies: [consoleProxy]);
     OriginsRepo originsRepo = OriginsRepo(proxies: [consoleProxy]);
     SigilsRepo sigilsRepo = SigilsRepo(proxies: [consoleProxy]);
+    WoundDeckRepo woundDeckRepo = WoundDeckRepo(
+      WoundDeckState({"wound_light": LightDeck(), "wound_medium": LightDeck(), "wound_severe": LightDeck()}, {}, []),
+      proxies: [consoleProxy],
+    );
 
     NavigationVM navigationVM = NavigationVM(NavState("home", {}), proxies: [consoleVM]);
 
-    BattleVM battleVM = BattleVM(mcRepo, originsRepo, sigilsRepo, proxies: [navigationVM, consoleProxy]);
+    BattleVM battleVM = BattleVM(mcRepo, woundDeckRepo, originsRepo, sigilsRepo, proxies: [navigationVM, consoleProxy]);
     CharacterCreationVM characterCreationVM = CharacterCreationVM(mcRepo, originsRepo, sigilsRepo, proxies: [navigationVM, consoleProxy]);
     HomeVM homeVM = HomeVM(proxies: [consoleProxy, navigationVM]);
 

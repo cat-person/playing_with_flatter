@@ -13,7 +13,7 @@ class MCWidget extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     final statKeys = mc.stats.keys.toList();
     return SizedBox(
-      height: 320,
+      height: 280,
       width: 1200,
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
