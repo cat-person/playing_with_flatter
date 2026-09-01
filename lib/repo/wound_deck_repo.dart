@@ -7,7 +7,7 @@ class WoundDeckRepo extends EventProcessor<Map<String, WoundDeck>> {
   final WoundDeck mediumDeck;
   final WoundDeck severeDeck;
 
-  WoundDeckRepo({required this.lightDeck, required this.mediumDeck, required this.severeDeck})
+  WoundDeckRepo({required this.lightDeck, required this.mediumDeck, required this.severeDeck, super.proxies})
     : super({"light": WoundDeck([]), "medium": WoundDeck([]), "severe": WoundDeck([])});
 
   @override

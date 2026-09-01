@@ -12,7 +12,7 @@ class CharacterCreationVM extends EventProcessor<CharacterCreationState> {
   final OriginsRepo originsRepo;
   final SigilsRepo sigilsRepo;
 
-  CharacterCreationVM(this.mcRepo, this.originsRepo, this.sigilsRepo, {super.proxy})
+  CharacterCreationVM(this.mcRepo, this.originsRepo, this.sigilsRepo, {super.proxies})
     : super(
         CharacterCreationState(
           mc: mcRepo.latestState,

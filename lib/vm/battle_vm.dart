@@ -16,7 +16,7 @@ class BattleVM extends EventProcessor<BattleState> {
   // final Map<String, Origin> originColleciton;
   // final Map<String, Sigil> sigilCollection;
 
-  BattleVM(this.mcRepo, this.originsRepo, this.sigilsRepo, {super.proxy})
+  BattleVM(this.mcRepo, this.originsRepo, this.sigilsRepo, {super.proxies})
     : super(BattleState(mc: mcRepo.latestState, originColleciton: originsRepo.latestState, sigilCollection: sigilsRepo.latestState)) {
     mcRepo.stream.listen(
       (data) => update(latestState.copyWith(mc: data)),
