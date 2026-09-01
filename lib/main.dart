@@ -34,11 +34,13 @@ class MyApp extends StatelessWidget {
     CharacterCreationVM characterCreationVM = CharacterCreationVM(mcRepo, originsRepo, sigilsRepo, proxies: [navigationVM, consoleProxy]);
     HomeVM homeVM = HomeVM(proxies: [consoleProxy, navigationVM]);
 
+    final textTheme = Theme.of(context).textTheme;
+
     return MaterialApp(
       home: Column(
         children: [
           SizedBox(
-            height: 320,
+            height: 640,
             child: StreamBuilder<NavState>(
               stream: navigationVM.stream,
               builder: (BuildContext context, AsyncSnapshot<NavState> snapshot) {
@@ -59,31 +61,28 @@ class MyApp extends StatelessWidget {
           ),
           Spacer(),
           SizedBox(
-            height: 120,
+            height: 52,
             child: Card(
               color: Colors.blueGrey,
               child: Row(
                 children: [
                   TextButton(
-                    child: Text("Character creation"),
+                    child: Text("Character creation", style: textTheme.titleLarge?.copyWith(color: Colors.white70)),
                     onPressed: () {
-                      Event event = Event("goto", params: {"route_id": "character_creation"});
-                      navigationVM.eventHandler(event);
+                      navigationVM.eventHandler(Event("goto", params: {"route_id": "character_creation"}));
                     },
                   ),
                   TextButton(
-                    child: Text("Battle"),
+                    child: Text("Battle", style: textTheme.titleLarge?.copyWith(color: Colors.white70)),
                     onPressed: () {
-                      Event event = Event("goto", params: {"route_id": "battle"});
-                      navigationVM.eventHandler(event);
+                      navigationVM.eventHandler(Event("goto", params: {"route_id": "battle"}));
                     },
                   ),
 
                   TextButton(
-                    child: Text("Home"),
+                    child: Text("Home", style: textTheme.titleLarge?.copyWith(color: Colors.white70)),
                     onPressed: () {
-                      Event event = Event("goto", params: {"route_id": "home"});
-                      navigationVM.eventHandler(event);
+                      navigationVM.eventHandler(Event("goto", params: {"route_id": "home"}));
                     },
                   ),
                 ],

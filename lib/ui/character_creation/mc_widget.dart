@@ -25,9 +25,9 @@ class MCWidget extends StatelessWidget {
               Text(mc.sigils.join(', '), style: textTheme.titleSmall?.copyWith(color: Colors.deepOrange[200])),
               SizedBox(
                 height: 160,
-                width: 240,
+                width: 280,
                 child: ListView.builder(
-                  padding: const EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(4),
                   itemCount: mc.stats.length,
                   itemBuilder: (BuildContext context, int index) {
                     final String statId = statKeys[index];
@@ -36,32 +36,6 @@ class MCWidget extends StatelessWidget {
                       return Text("$statId: $statValue", style: textTheme.titleSmall?.copyWith(color: Colors.grey[200]));
                     }
                     return Text("Can't read stat with index: $index");
-                  },
-                ),
-              ),
-              SizedBox(
-                height: 60,
-                child: ListView.builder(
-                  padding: const EdgeInsets.all(8),
-                  scrollDirection: Axis.horizontal,
-                  itemCount: mc.actions.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final String actionId = mc.actions[index];
-                    return SizedBox(
-                      height: 40,
-                      width: 140,
-                      child: GestureDetector(
-                        onTap: () {
-                          eventHandler(Event("perform", params: {"action_id": actionId}));
-                        },
-                        child: Card(
-                          color: Colors.tealAccent,
-                          child: Center(
-                            child: Text(actionId, style: textTheme.labelLarge?.copyWith(color: Colors.blueAccent)),
-                          ),
-                        ),
-                      ),
-                    );
                   },
                 ),
               ),

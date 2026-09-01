@@ -29,16 +29,15 @@ class CharacterCreationPage extends MyPage<CharacterCreationState> {
 
     return Column(
       children: [
-        SizedBox(height: 12), // Add spacing
         MCWidget(mc, eventHandler),
-        SizedBox(height: 12), // Add spacing
+        SizedBox(height: 4),
         SizedBox(
-          height: 80,
+          height: 72,
           child: Center(
             child: Container(
               color: Colors.red,
               child: ListView.builder(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
                 scrollDirection: Axis.horizontal,
                 shrinkWrap: true,
                 itemCount: selectebleOriginsId.length,
@@ -60,7 +59,7 @@ class CharacterCreationPage extends MyPage<CharacterCreationState> {
           ),
         ),
 
-        SizedBox(height: 12), // Add spacing
+        SizedBox(height: 4), // Add spacing
         Center(
           child: SizedBox(
             height: 240,

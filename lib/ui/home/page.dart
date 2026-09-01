@@ -13,9 +13,9 @@ class HomePage extends MyPage<String> {
       children: [
         Center(child: Text(data)),
         SizedBox(
-          height: 120,
+          height: 54,
           child: Card(
-            color: Colors.green,
+            color: Colors.brown,
             child: Row(
               children: [
                 TextButton(
