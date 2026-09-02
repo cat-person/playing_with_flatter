@@ -7,6 +7,7 @@ import 'package:snd/repo/wound_deck_repo.dart';
 import 'package:snd/ui/battle/page.dart';
 import 'package:snd/ui/console/my_console.dart';
 import 'vm/battle_vm.dart';
+import 'vm/console_vm.dart';
 import 'vm/character_creation_vm.dart';
 import 'vm/home_vm.dart';
 import 'package:snd/repo/pojo/wound.dart';
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    ConsoleProxy consoleProxy = ConsoleProxy();
+    ConsoleRepo consoleProxy = ConsoleRepo();
     ConsoleVM consoleVM = ConsoleVM(consoleProxy);
 
     MCRepo mcRepo = MCRepo(proxies: [consoleProxy]);
@@ -43,60 +44,80 @@ class MyApp extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return MaterialApp(
-      home: Column(
-        children: [
-          SizedBox(
-            height: 640,
-            child: StreamBuilder<NavState>(
-              stream: navigationVM.stream,
-              builder: (BuildContext context, AsyncSnapshot<NavState> snapshot) {
-                NavState? state = snapshot.data;
-                consoleProxy.eventHandler(Event("Nav changed", params: {"data": state}));
-                return switch (state?.id) {
-                  "home" => HomePage(stream: homeVM.stream, initialData: "Pupupu", eventHandler: homeVM.eventHandler),
-                  "character_creation" => CharacterCreationPage(
-                    stream: characterCreationVM.stream,
-                    initialData: characterCreationVM.latestState,
-                    eventHandler: characterCreationVM.eventHandler,
-                  ),
-                  "battle" => BattlePage(stream: battleVM.stream, initialData: battleVM.latestState, eventHandler: battleVM.eventHandler),
-                  _ => HomePage(stream: homeVM.stream, initialData: "Default", eventHandler: homeVM.eventHandler),
-                };
-              },
-            ),
-          ),
-          Spacer(),
-          SizedBox(
-            height: 52,
-            child: Card(
-              color: Colors.blueGrey,
-              child: Row(
-                children: [
-                  TextButton(
-                    child: Text("Character creation", style: textTheme.titleLarge?.copyWith(color: Colors.white70)),
-                    onPressed: () {
-                      navigationVM.eventHandler(Event("goto", params: {"route_id": "character_creation"}));
-                    },
-                  ),
-                  TextButton(
-                    child: Text("Battle", style: textTheme.titleLarge?.copyWith(color: Colors.white70)),
-                    onPressed: () {
-                      navigationVM.eventHandler(Event("goto", params: {"route_id": "battle"}));
-                    },
-                  ),
-
-                  TextButton(
-                    child: Text("Home", style: textTheme.titleLarge?.copyWith(color: Colors.white70)),
-                    onPressed: () {
-                      navigationVM.eventHandler(Event("goto", params: {"route_id": "home"}));
-                    },
-                  ),
-                ],
+      home: Container(
+        color: Colors.black,
+        child: Column(
+          children: [
+            SizedBox(
+              height: 640,
+              child: StreamBuilder<NavState>(
+                stream: navigationVM.stream,
+                builder: (BuildContext context, AsyncSnapshot<NavState> snapshot) {
+                  NavState? state = snapshot.data;
+                  consoleProxy.eventHandler(Event("Nav changed", params: {"data": state}));
+                  return switch (state?.id) {
+                    "home" => HomePage(stream: homeVM.stream, initialData: "Pupupu", eventHandler: homeVM.eventHandler),
+                    "character_creation" => CharacterCreationPage(
+                      stream: characterCreationVM.stream,
+                      initialData: characterCreationVM.latestState,
+                      eventHandler: characterCreationVM.eventHandler,
+                    ),
+                    "battle" => BattlePage(stream: battleVM.stream, initialData: battleVM.latestState, eventHandler: battleVM.eventHandler),
+                    _ => HomePage(stream: homeVM.stream, initialData: "Default", eventHandler: homeVM.eventHandler),
+                  };
+                },
               ),
             ),
-          ),
-          MyConsoleWidget(consoleVM.stream, [], consoleVM.eventHandler),
-        ],
+            Spacer(),
+            SizedBox(
+              height: 52,
+              child: Card(
+                color: Colors.blueGrey,
+                child: Row(
+                  children: [
+                    Builder(
+                      builder: (context) {
+                        return TextButton(
+                          child: Text("Term", style: textTheme.titleLarge?.copyWith(color: Colors.white70)),
+                          onPressed: () {
+                            showModalBottomSheet<void>(
+                              context: context,
+                              constraints: BoxConstraints(
+                                maxWidth: double.infinity, // Override the default constraints
+                              ),
+                              builder: (BuildContext context) {
+                                return MyConsoleWidget(consoleVM.latestState, consoleVM.eventHandler, stream: consoleVM.stream);
+                              },
+                            );
+                          },
+                        );
+                      },
+                    ),
+                    TextButton(
+                      child: Text("Character creation", style: textTheme.titleLarge?.copyWith(color: Colors.white70)),
+                      onPressed: () {
+                        navigationVM.eventHandler(Event("goto", params: {"route_id": "character_creation"}));
+                      },
+                    ),
+                    TextButton(
+                      child: Text("Battle", style: textTheme.titleLarge?.copyWith(color: Colors.white70)),
+                      onPressed: () {
+                        navigationVM.eventHandler(Event("goto", params: {"route_id": "battle"}));
+                      },
+                    ),
+
+                    TextButton(
+                      child: Text("Home", style: textTheme.titleLarge?.copyWith(color: Colors.white70)),
+                      onPressed: () {
+                        navigationVM.eventHandler(Event("goto", params: {"route_id": "home"}));
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -1,72 +1,93 @@
 import 'package:flutter/material.dart';
-import 'package:snd/event_processor/event_processor.dart';
 import 'package:snd/event_processor/event.dart';
+import 'package:snd/vm/console_vm.dart';
 
-class ConsoleVM extends EventProcessor<List<TextSpan>> {
-  final EventProcessor<List<Event>> consoleRepo;
-  ConsoleVM(this.consoleRepo) : super([TextSpan(text: "Halo"), TextSpan(text: "Bububu"), TextSpan(text: "@.@")]) {
-    consoleRepo.stream.listen(
-      (data) => update(
-        data
-            .map(
-              (item) => TextSpan(
-                children: [
-                  TextSpan(
-                    text: "${item.id}: ",
-                    style: TextStyle(color: Colors.lightBlue, decoration: TextDecoration.none, fontSize: 16),
-                  ),
-                  TextSpan(
-                    text: "${item.params}",
-                    style: TextStyle(color: Colors.lightGreen, decoration: TextDecoration.none, fontSize: 16),
-                  ),
-                ],
-              ),
-            )
-            .toList(),
-      ),
-      onError: (error) => print('Error: $error'),
-      onDone: () => print('Stream closed'),
-      cancelOnError: false,
-    );
-  }
-
-  @override
-  bool internalEventHandler(Event event) {
-    return true;
-  }
-}
-
-class MyConsoleWidget extends StatelessWidget {
-  final Stream<List<TextSpan>> stream;
-  final List<TextSpan> initialData;
+class MyConsoleWidget extends StreamBuilderBase<ConsoleState, AsyncSnapshot<ConsoleState>> {
+  final ConsoleState initialData;
   final bool Function(Event event) eventHandler;
 
-  const MyConsoleWidget(this.stream, this.initialData, this.eventHandler, {super.key});
+  const MyConsoleWidget(this.initialData, this.eventHandler, {required super.stream, super.key});
 
   @override
-  build(BuildContext context) {
+  build(BuildContext context, AsyncSnapshot<ConsoleState> snap) {
+    ConsoleState consoleState = snap.data ?? ConsoleState("", []);
     return Container(
+      height: 288,
       color: Colors.black87,
-      child: StreamBuilder<List<TextSpan>>(
-        stream: stream,
-        initialData: initialData,
-        builder: (BuildContext context, AsyncSnapshot<List<TextSpan>> snap) {
-          List<TextSpan> entries = snap.data ?? [];
-          return SizedBox(
+      width: double.infinity,
+      child: Column(
+        children: [
+          SizedBox(
             height: 240,
             child: ListView.builder(
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
-              itemCount: entries.length,
+              itemCount: consoleState.consoleOutput.length,
               itemBuilder: (BuildContext context, int index) {
-                final TextSpan span = entries[index];
+                final TextSpan span = consoleState.consoleOutput[index];
                 return LineListItem(span);
               },
             ),
-          );
-        },
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(4, 0, 20, 0),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 12,
+                  child: Text(
+                    ">",
+                    style: TextStyle(color: Colors.lightBlueAccent, decoration: TextDecoration.none, fontSize: 16),
+                  ),
+                ),
+                SizedBox(width: 4),
+                Expanded(child: ConsoleInput(consoleState.consoleInput, eventHandler)),
+              ],
+            ),
+          ),
+        ],
       ),
+    );
+  }
+
+  @override
+  AsyncSnapshot<ConsoleState> initial() => AsyncSnapshot<ConsoleState>.withData(ConnectionState.none, initialData);
+
+  @override
+  AsyncSnapshot<ConsoleState> afterConnected(AsyncSnapshot<ConsoleState> current) => current.inState(ConnectionState.waiting);
+
+  @override
+  AsyncSnapshot<ConsoleState> afterData(AsyncSnapshot<ConsoleState> current, ConsoleState data) {
+    return AsyncSnapshot<ConsoleState>.withData(ConnectionState.active, data);
+  }
+
+  @override
+  AsyncSnapshot<ConsoleState> afterError(AsyncSnapshot<ConsoleState> current, Object error, StackTrace stackTrace) {
+    return AsyncSnapshot<ConsoleState>.withError(ConnectionState.active, error, stackTrace);
+  }
+
+  @override
+  AsyncSnapshot<ConsoleState> afterDone(AsyncSnapshot<ConsoleState> current) => current.inState(ConnectionState.done);
+
+  @override
+  AsyncSnapshot<ConsoleState> afterDisconnected(AsyncSnapshot<ConsoleState> current) => current.inState(ConnectionState.none);
+}
+
+class ConsoleInput extends StatelessWidget {
+  final String value;
+  final bool Function(Event event) eventHandler;
+
+  const ConsoleInput(this.value, this.eventHandler, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      style: TextStyle(color: Colors.lightBlueAccent, decoration: TextDecoration.none, fontSize: 16),
+      onSubmitted: (value) {
+        eventHandler(Event("console_input", params: {"command": value}));
+        value = "";
+      },
     );
   }
 }

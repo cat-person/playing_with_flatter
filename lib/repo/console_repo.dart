@@ -1,8 +1,8 @@
 import 'package:snd/event_processor/event_processor.dart';
 import 'package:snd/event_processor/event.dart';
 
-class ConsoleProxy extends EventProcessor<List<Event>> {
-  ConsoleProxy() : super([]);
+class ConsoleRepo extends EventProcessor<List<Event>> {
+  ConsoleRepo() : super([]);
 
   @override
   bool internalEventHandler(Event event) {
