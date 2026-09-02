@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
     OriginsRepo originsRepo = OriginsRepo(proxies: [consoleProxy]);
     SigilsRepo sigilsRepo = SigilsRepo(proxies: [consoleProxy]);
     WoundDeckRepo woundDeckRepo = WoundDeckRepo(
-      WoundDeckState({"wound_light": LightDeck(), "wound_medium": LightDeck(), "wound_severe": LightDeck()}, {}, []),
+      WoundDeckState({"wound_light": LightDeck(), "wound_serious": SeriousDeck(), "wound_severe": SevereDeck()}, {}, []),
       proxies: [consoleProxy],
     );
 

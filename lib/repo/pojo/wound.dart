@@ -7,6 +7,10 @@ class Wound {
   const Wound(this.priority, this.type, this.severity, this.effect);
 }
 
+const String tagLight = "wound_light";
+const String tagMedium = "wound_medium";
+const String tagSevere = "wound_severe";
+
 const Map<String, Wound> woundCollection = {
   "light": AnySet.light,
   "serious": AnySet.serious,
@@ -31,9 +35,16 @@ class WoundDeck {
 
   WoundDeck(this.id, this._deck);
 
-  static const String tagLight = "wound_light";
-  static const String tagMedium = "wound_medium";
-  static const String tagSevere = "wound_severe";
+  void shuffle() {
+    _deck.shuffle();
+  }
+
+  List<String> draw(int howMany) {
+    // deck
+    List<String> result = _deck.skip(_deck.length - howMany).toList();
+    _deck = _deck.take(_deck.length - howMany).toList();
+    return result;
+  }
 }
 
 class WoundSource {
@@ -54,17 +65,26 @@ class LightDeck extends WoundDeck {
         ...List<String>.filled(4, "bruise"),
         ...List<String>.filled(4, "bone_crack"),
       ]);
+}
 
-  void shuffle() {
-    _deck.shuffle();
-  }
+class SeriousDeck extends WoundDeck {
+  SeriousDeck()
+    : super("wound_serious", [
+        ...List<String>.filled(20, "serious"),
+        ...List<String>.filled(4, "tendon_rupture"),
+        ...List<String>.filled(4, "arterial_rupture"),
+        ...List<String>.filled(4, "muscle_crush"),
+        ...List<String>.filled(4, "compound_fracture"),
+      ]);
+}
 
-  List<String> draw(int howMany) {
-    // deck
-    List<String> result = _deck.skip(_deck.length - howMany).toList();
-    _deck = _deck.take(_deck.length - howMany).toList();
-    return result;
-  }
+class SevereDeck extends WoundDeck {
+  SevereDeck()
+    : super("wound_severe", [
+        ...List<String>.filled(10, "severe"),
+        ...List<String>.filled(4, "bisection"),
+        ...List<String>.filled(4, "obliteration"),
+      ]);
 }
 
 class LacerationSet {

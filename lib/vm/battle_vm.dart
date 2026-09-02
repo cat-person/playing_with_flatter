@@ -23,8 +23,8 @@ class BattleVM extends EventProcessor<BattleState> {
         BattleState(
           mc: mcRepo.latestState,
           drawnCards: woundDeckRepo.latestState.drawnCards,
-          woundDeckCollection: woundDeckRepo.latestState.deckColleciton,
-          woundCollection: woundDeckRepo.latestState.woundColleciton,
+          woundDeckCollection: woundDeckRepo.latestState.deckCollection,
+          woundCollection: woundDeckRepo.latestState.woundCollection,
           originColleciton: originsRepo.latestState,
           sigilCollection: sigilsRepo.latestState,
         ),
