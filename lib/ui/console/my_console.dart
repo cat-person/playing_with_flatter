@@ -89,8 +89,8 @@ class ConsoleInputWidget extends StatelessWidget {
       keyboardType: TextInputType.text,
       textInputAction: TextInputAction.done,
       controller: controller,
-      onSubmitted: (value) {
-        eventHandler(Event("exec", params: {"command_text": value}));
+      onEditingComplete: () {
+        eventHandler(Event("exec", params: {"command_text": controller.text}));
       },
       enableSuggestions: false,
       autocorrect: false,
