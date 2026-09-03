@@ -10,45 +10,50 @@ class MyConsoleWidget extends StreamBuilderBase<ConsoleState, AsyncSnapshot<Cons
 
   @override
   build(BuildContext context, AsyncSnapshot<ConsoleState> snap) {
-    ConsoleState consoleState = snap.data ?? ConsoleState("", []);
-    return Container(
-      height: 288,
-      color: Colors.black87,
-      width: double.infinity,
-      child: Column(
-        children: [
-          SizedBox(
-            height: 240,
-            child: ListView.builder(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              itemCount: consoleState.consoleOutput.length,
-              itemBuilder: (BuildContext context, int index) {
-                final TextSpan span = consoleState.consoleOutput[index];
-                return LineListItem(span);
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(4, 0, 20, 0),
-            child: Row(
+    ConsoleState? consoleState = snap.data;
+
+    return consoleState == null
+        ? Center(
+            child: Text("PRIVET", style: TextStyle(color: Colors.white, fontSize: 16)),
+          )
+        : Container(
+            height: 288,
+            color: Colors.black87,
+            width: double.infinity,
+            child: Column(
               children: [
                 SizedBox(
-                  width: 12,
-                  child: Text(
-                    ">",
-                    style: TextStyle(color: Colors.lightBlueAccent, decoration: TextDecoration.none, fontSize: 16),
+                  height: 240,
+                  child: ListView.builder(
+                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: consoleState.consoleOutput.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final TextSpan span = consoleState.consoleOutput[index];
+                      return LineListItem(span);
+                    },
                   ),
                 ),
-                SizedBox(width: 4),
-                Expanded(child: ConsoleInput(consoleState.consoleInput, eventHandler)),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(4, 0, 20, 0),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 12,
+                        child: Text(
+                          ">",
+                          style: TextStyle(color: Colors.lightBlueAccent, decoration: TextDecoration.none, fontSize: 16),
+                        ),
+                      ),
+                      SizedBox(width: 4),
+                      Expanded(child: ConsoleInputWidget(consoleState.consoleInputController, eventHandler)),
+                    ],
+                  ),
+                ),
               ],
             ),
-          ),
-        ],
-      ),
-    );
+          );
   }
 
   @override
@@ -74,20 +79,22 @@ class MyConsoleWidget extends StreamBuilderBase<ConsoleState, AsyncSnapshot<Cons
   AsyncSnapshot<ConsoleState> afterDisconnected(AsyncSnapshot<ConsoleState> current) => current.inState(ConnectionState.none);
 }
 
-class ConsoleInput extends StatelessWidget {
-  final String value;
+class ConsoleInputWidget extends StatelessWidget {
+  final TextEditingController controller;
   final bool Function(Event event) eventHandler;
-
-  const ConsoleInput(this.value, this.eventHandler, {super.key});
-
+  const ConsoleInputWidget(this.controller, this.eventHandler, {super.key});
   @override
   Widget build(BuildContext context) {
     return TextField(
-      style: TextStyle(color: Colors.lightBlueAccent, decoration: TextDecoration.none, fontSize: 16),
+      keyboardType: TextInputType.text,
+      textInputAction: TextInputAction.done,
+      controller: controller,
       onSubmitted: (value) {
-        eventHandler(Event("console_input", params: {"command": value}));
-        value = "";
+        eventHandler(Event("exec", params: {"command_text": value}));
       },
+      enableSuggestions: false,
+      autocorrect: false,
+      style: TextStyle(color: Colors.lightBlueAccent, decoration: TextDecoration.none, fontSize: 16),
     );
   }
 }
