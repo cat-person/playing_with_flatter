@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:snd/event_processor/event.dart';
 import 'package:snd/vm/console_vm.dart';
+import 'dart:ui' as ui show BoxHeightStyle;
 
 class MyConsoleWidget extends StreamBuilderBase<ConsoleState, AsyncSnapshot<ConsoleState>> {
   final ConsoleState initialData;
@@ -22,15 +23,15 @@ class MyConsoleWidget extends StreamBuilderBase<ConsoleState, AsyncSnapshot<Cons
       });
 
       return Container(
-        height: 288,
+        height: 240,
         color: Colors.black87,
         width: double.infinity,
         child: Column(
           children: [
+            // SizedBox(height: 32),
             SizedBox(
-              height: 240,
+              height: 212,
               child: ListView.builder(
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
                 scrollDirection: Axis.vertical,
                 controller: scrollController,
                 shrinkWrap: true,
@@ -41,22 +42,32 @@ class MyConsoleWidget extends StreamBuilderBase<ConsoleState, AsyncSnapshot<Cons
                 },
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(4, 0, 20, 0),
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 12,
-                    child: Text(
-                      ">",
-                      style: TextStyle(color: Colors.lightBlueAccent, decoration: TextDecoration.none, fontSize: 16),
-                    ),
+            Container(
+              child: SizedBox(
+                height: 24,
+                child: Center(
+                  child: Row(
+                    children: [
+                      SizedBox(width: 4),
+                      SizedBox(
+                        width: 12,
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            ">",
+                            style: TextStyle(color: Colors.lightBlue, decoration: TextDecoration.none, fontSize: 16),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 4),
+                      Expanded(child: ConsoleInputWidget(consoleState.consoleInputController, eventHandler)),
+                      SizedBox(width: 20),
+                    ],
                   ),
-                  SizedBox(width: 4),
-                  Expanded(child: ConsoleInputWidget(consoleState.consoleInputController, eventHandler)),
-                ],
+                ),
               ),
             ),
+            SizedBox(height: 4),
           ],
         ),
       );
@@ -92,16 +103,26 @@ class ConsoleInputWidget extends StatelessWidget {
   const ConsoleInputWidget(this.controller, this.eventHandler, {super.key});
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      keyboardType: TextInputType.text,
-      textInputAction: TextInputAction.done,
-      controller: controller,
-      onEditingComplete: () {
-        eventHandler(Event("exec", params: {"command_text": controller.text}));
-      },
-      enableSuggestions: false,
-      autocorrect: false,
-      style: TextStyle(color: Colors.lightBlueAccent, decoration: TextDecoration.none, fontSize: 16),
+    return Padding(
+      padding: EdgeInsetsGeometry.symmetric(vertical: 2, horizontal: 0),
+      // Container(
+      // height: 36,
+
+      // alignment: Alignment.center,
+      // color: Colors.blueGrey,
+      child: TextField(
+        cursorHeight: 16,
+        selectionHeightStyle: ui.BoxHeightStyle.tight,
+        keyboardType: TextInputType.text,
+        textInputAction: TextInputAction.done,
+        controller: controller,
+        onEditingComplete: () {
+          eventHandler(Event("exec", params: {"command_text": controller.text}));
+        },
+        enableSuggestions: false,
+        autocorrect: false,
+        style: TextStyle(color: Colors.lightBlue, decoration: TextDecoration.none, fontSize: 16, height: 5),
+      ),
     );
   }
 }
@@ -112,6 +133,6 @@ class LineListItem extends StatelessWidget {
 
   @override
   build(BuildContext context) {
-    return SizedBox(height: 24, child: Text.rich(span));
+    return Padding(padding: EdgeInsetsGeometry.symmetric(vertical: 4, horizontal: 20), child: Text.rich(span));
   }
 }
