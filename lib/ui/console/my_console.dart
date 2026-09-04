@@ -5,55 +5,62 @@ import 'package:snd/vm/console_vm.dart';
 class MyConsoleWidget extends StreamBuilderBase<ConsoleState, AsyncSnapshot<ConsoleState>> {
   final ConsoleState initialData;
   final bool Function(Event event) eventHandler;
+  final ScrollController scrollController = ScrollController();
 
-  const MyConsoleWidget(this.initialData, this.eventHandler, {required super.stream, super.key});
+  MyConsoleWidget(this.initialData, this.eventHandler, {required super.stream, super.key});
 
   @override
   build(BuildContext context, AsyncSnapshot<ConsoleState> snap) {
     ConsoleState? consoleState = snap.data;
+    if (consoleState == null) {
+      return Center(
+        child: Text("PRIVET", style: TextStyle(color: Colors.white, fontSize: 16)),
+      );
+    } else {
+      Future.delayed(Duration(milliseconds: 100), () {
+        scrollController.animateTo(scrollController.position.maxScrollExtent, duration: Duration(milliseconds: 200), curve: Curves.easeOut);
+      });
 
-    return consoleState == null
-        ? Center(
-            child: Text("PRIVET", style: TextStyle(color: Colors.white, fontSize: 16)),
-          )
-        : Container(
-            height: 288,
-            color: Colors.black87,
-            width: double.infinity,
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 240,
-                  child: ListView.builder(
-                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: consoleState.consoleOutput.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final TextSpan span = consoleState.consoleOutput[index];
-                      return LineListItem(span);
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(4, 0, 20, 0),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: 12,
-                        child: Text(
-                          ">",
-                          style: TextStyle(color: Colors.lightBlueAccent, decoration: TextDecoration.none, fontSize: 16),
-                        ),
-                      ),
-                      SizedBox(width: 4),
-                      Expanded(child: ConsoleInputWidget(consoleState.consoleInputController, eventHandler)),
-                    ],
-                  ),
-                ),
-              ],
+      return Container(
+        height: 288,
+        color: Colors.black87,
+        width: double.infinity,
+        child: Column(
+          children: [
+            SizedBox(
+              height: 240,
+              child: ListView.builder(
+                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+                scrollDirection: Axis.vertical,
+                controller: scrollController,
+                shrinkWrap: true,
+                itemCount: consoleState.consoleOutput.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final TextSpan span = consoleState.consoleOutput[index];
+                  return LineListItem(span);
+                },
+              ),
             ),
-          );
+            Padding(
+              padding: const EdgeInsets.fromLTRB(4, 0, 20, 0),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 12,
+                    child: Text(
+                      ">",
+                      style: TextStyle(color: Colors.lightBlueAccent, decoration: TextDecoration.none, fontSize: 16),
+                    ),
+                  ),
+                  SizedBox(width: 4),
+                  Expanded(child: ConsoleInputWidget(consoleState.consoleInputController, eventHandler)),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   @override

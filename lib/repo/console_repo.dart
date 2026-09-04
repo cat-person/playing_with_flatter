@@ -6,7 +6,8 @@ class ConsoleRepo extends EventProcessor<List<Event>> {
 
   @override
   bool internalEventHandler(Event event) {
-    update([event, ...latestState]);
+    latestState.add(event);
+    update(latestState);
     return true;
   }
 }
