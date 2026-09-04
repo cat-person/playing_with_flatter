@@ -32,8 +32,23 @@ class EnemiesWidget extends StatelessWidget {
                   width: 120,
                   child: Card(
                     color: Colors.purple,
-                    child: Center(
-                      child: Text(creature.name, style: textTheme.titleSmall?.copyWith(color: Colors.grey[200])),
+                    child: Column(
+                      children: [
+                        Spacer(),
+                        Text(creature.id, style: textTheme.titleSmall?.copyWith(color: Colors.grey[200])),
+                        Spacer(),
+                        GestureDetector(
+                          onTap: () {
+                            eventHandler(Event("perform", params: {"action_id": "throw_dice", "performed_by": creature.id}));
+                          },
+                          child: Card(
+                            color: Colors.white,
+                            child: Center(
+                              child: Text("Throw dice", style: textTheme.labelLarge?.copyWith(color: Colors.indigo)),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),

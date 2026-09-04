@@ -1,10 +1,10 @@
 class Creature {
-  final String name;
+  final String id;
   final String originId;
   final List<String> sigils;
   final Map<String, BodyPart> bodyparts;
 
-  const Creature(this.name, this.originId, this.sigils, this.bodyparts);
+  const Creature(this.id, this.originId, this.sigils, this.bodyparts);
 }
 
 class BodyPart {

@@ -23,6 +23,21 @@ class MCWidget extends StatelessWidget {
             Text("Hero: ${mc.originId}", style: textTheme.titleLarge?.copyWith(color: Colors.red[200])),
             Text(mc.sigils.join(', '), style: textTheme.titleSmall?.copyWith(color: Colors.deepOrange[200])),
             SizedBox(
+              height: 32,
+              width: 80,
+              child: GestureDetector(
+                onTap: () {
+                  eventHandler(Event("perform", params: {"action_id": "throw_dice", "performed_by": "mc"}));
+                },
+                child: Card(
+                  color: Colors.white,
+                  child: Center(
+                    child: Text("Throw dice", style: textTheme.labelMedium?.copyWith(color: Colors.indigo)),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
               height: 60,
               child: ListView.builder(
                 padding: const EdgeInsets.all(8),
