@@ -1,6 +1,7 @@
 import 'package:snd/event_processor/event_processor.dart';
 import 'package:snd/repo/mc_repo.dart';
 import 'package:snd/repo/origins_repo.dart';
+import 'package:snd/repo/pojo/creature.dart';
 import 'package:snd/repo/pojo/wound.dart';
 import 'package:snd/repo/sigils_repo.dart';
 import 'package:snd/event_processor/event.dart';
@@ -8,9 +9,11 @@ import 'package:snd/repo/pojo/origins.dart';
 import 'package:snd/repo/pojo/mc.dart';
 import 'package:snd/repo/pojo/sigil.dart';
 import 'package:snd/repo/wound_deck_repo.dart';
+import 'package:snd/repo/creatures_repo.dart';
 
 class BattleVM extends EventProcessor<BattleState> {
   final MCRepo mcRepo;
+  final CreaturesRepo creaturesRepo;
   final WoundDeckRepo woundDeckRepo;
   final OriginsRepo originsRepo;
   final SigilsRepo sigilsRepo;
@@ -18,10 +21,11 @@ class BattleVM extends EventProcessor<BattleState> {
   // final Map<String, Origin> originColleciton;
   // final Map<String, Sigil> sigilCollection;
 
-  BattleVM(this.mcRepo, this.woundDeckRepo, this.originsRepo, this.sigilsRepo, {super.proxies})
+  BattleVM(this.mcRepo, this.creaturesRepo, this.woundDeckRepo, this.originsRepo, this.sigilsRepo, {super.proxies})
     : super(
         BattleState(
           mc: mcRepo.latestState,
+          enemies: creaturesRepo.latestState,
           drawnCards: woundDeckRepo.latestState.drawnCards,
           woundDeckCollection: woundDeckRepo.latestState.deckCollection,
           woundCollection: woundDeckRepo.latestState.woundCollection,
@@ -66,6 +70,7 @@ class BattleVM extends EventProcessor<BattleState> {
 
 class BattleState {
   final MC mc;
+  final Map<String, Creature> enemies;
   final List<String> drawnCards;
   final Map<String, WoundDeck> woundDeckCollection;
   final Map<String, Wound> woundCollection;
@@ -74,6 +79,7 @@ class BattleState {
 
   BattleState({
     required this.mc,
+    required this.enemies,
     required this.drawnCards,
     required this.woundDeckCollection,
     required this.woundCollection,
@@ -82,6 +88,7 @@ class BattleState {
   });
   BattleState copyWith({
     MC? mc,
+    Map<String, Creature>? enemies,
     List<String>? drawnCards,
     Map<String, WoundDeck>? woundDeckCollection,
     Map<String, Wound>? woundCollection,
@@ -90,6 +97,7 @@ class BattleState {
   }) {
     return BattleState(
       mc: mc ?? this.mc,
+      enemies: enemies ?? this.enemies,
       drawnCards: drawnCards ?? this.drawnCards,
       woundDeckCollection: woundDeckCollection ?? this.woundDeckCollection,
       woundCollection: woundCollection ?? this.woundCollection,

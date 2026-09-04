@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:snd/event_processor/event.dart';
+import 'package:snd/repo/creatures_repo.dart';
 import 'package:snd/repo/mc_repo.dart';
 import 'package:snd/repo/origins_repo.dart';
 import 'package:snd/repo/sigils_repo.dart';
@@ -30,6 +31,8 @@ class MyApp extends StatelessWidget {
     MCRepo mcRepo = MCRepo(proxies: [consoleProxy]);
     OriginsRepo originsRepo = OriginsRepo(proxies: [consoleProxy]);
     SigilsRepo sigilsRepo = SigilsRepo(proxies: [consoleProxy]);
+    CreaturesRepo creaturesRepo = CreaturesRepo();
+
     WoundDeckRepo woundDeckRepo = WoundDeckRepo(
       WoundDeckState({"wound_light": LightDeck(), "wound_serious": SeriousDeck(), "wound_severe": SevereDeck()}, {}, []),
       proxies: [consoleProxy],
@@ -37,7 +40,7 @@ class MyApp extends StatelessWidget {
 
     NavigationVM navigationVM = NavigationVM(NavState("home", {}), proxies: [consoleVM]);
 
-    BattleVM battleVM = BattleVM(mcRepo, woundDeckRepo, originsRepo, sigilsRepo, proxies: [navigationVM, consoleProxy]);
+    BattleVM battleVM = BattleVM(mcRepo, creaturesRepo, woundDeckRepo, originsRepo, sigilsRepo, proxies: [navigationVM, consoleProxy]);
     CharacterCreationVM characterCreationVM = CharacterCreationVM(mcRepo, originsRepo, sigilsRepo, proxies: [navigationVM, consoleProxy]);
     HomeVM homeVM = HomeVM(proxies: [consoleProxy, navigationVM]);
 
@@ -49,7 +52,7 @@ class MyApp extends StatelessWidget {
         child: Column(
           children: [
             SizedBox(
-              height: 640,
+              height: 840,
               child: StreamBuilder<NavState>(
                 stream: navigationVM.stream,
                 builder: (BuildContext context, AsyncSnapshot<NavState> snapshot) {
