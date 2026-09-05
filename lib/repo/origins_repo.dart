@@ -5,7 +5,7 @@ import 'package:snd/event_processor/event.dart';
 
 class OriginsRepo extends EventProcessor<Map<String, Origin>> {
   // final OriginsReader reader = OriginsReader("origins.json");
-  OriginsRepo({super.proxies}) : super(defaultOrigins) {
+  OriginsRepo({super.proxies}) : super(originCollection) {
     // reader.eventHandler(Event("load"));
   }
 

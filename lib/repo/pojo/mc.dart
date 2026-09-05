@@ -12,7 +12,7 @@ class MC {
   }
 
   Map<String, int> get stats {
-    Origin? origin = defaultOrigins[originId];
+    Origin? origin = originCollection[originId];
     if (origin != null) {
       Map<String, int> originStats = origin.primaryStats;
       return originStats;

@@ -1,7 +1,8 @@
 import 'stats.dart';
 import 'sigil.dart';
 
-Map<String, Origin> defaultOrigins = {
+Map<String, Origin> originCollection = {
+  // Mc origins
   // Const ++ Str + myst - per - char -
   "flash_construct": Origin(
     {
@@ -76,6 +77,43 @@ Map<String, Origin> defaultOrigins = {
     },
     [selectByTag("hunter_orden", 1), selectByTag("hunter", 1), selectByTag("common", 2)],
   ),
+
+  // Non mc creature
+  "rat": Origin({
+    PrimaryStat.mysticism: 2,
+    PrimaryStat.strength: 4,
+    PrimaryStat.speed: 6,
+    PrimaryStat.perception: 6,
+    PrimaryStat.intelligence: 2,
+    PrimaryStat.constitution: 2,
+  }, []),
+
+  "blob": Origin({
+    PrimaryStat.mysticism: 2,
+    PrimaryStat.strength: 4,
+    PrimaryStat.speed: 2,
+    PrimaryStat.perception: 2,
+    PrimaryStat.intelligence: 2,
+    PrimaryStat.constitution: 6,
+  }, []),
+
+  "wolf": Origin({
+    PrimaryStat.mysticism: 2,
+    PrimaryStat.strength: 4,
+    PrimaryStat.speed: 4,
+    PrimaryStat.perception: 6,
+    PrimaryStat.intelligence: 6,
+    PrimaryStat.constitution: 2,
+  }, []),
+
+  "wisp": Origin({
+    PrimaryStat.mysticism: 5,
+    PrimaryStat.strength: 2,
+    PrimaryStat.speed: 4,
+    PrimaryStat.perception: 4,
+    PrimaryStat.intelligence: 5,
+    PrimaryStat.constitution: 2,
+  }, []),
 };
 
 class Origin {
@@ -95,7 +133,7 @@ class SigilSelection {
 }
 
 SigilSelection selectByTag(String tag, int howMany) {
-  List<String> selection = sigils.values.where((sigil) => sigil.tag == tag).map((sigil) => sigil.id).toList();
+  List<String> selection = sigilCollection.values.where((sigil) => sigil.tag == tag).map((sigil) => sigil.id).toList();
 
   return SigilSelection(selection, howMany);
 }

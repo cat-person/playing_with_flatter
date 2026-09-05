@@ -19,7 +19,7 @@ class Modifier {
   Modifier(this.statId, this.modifier, this.upTo);
 }
 
-const Map<String, Sigil> sigils = {
+const Map<String, Sigil> sigilCollection = {
   "mystic": Sigils.mystic,
   "muscular": Sigils.muscular,
   "fast_hands": Sigils.fastHands,

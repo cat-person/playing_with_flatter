@@ -5,8 +5,10 @@ import 'package:snd/repo/pojo/origins.dart';
 import 'package:snd/repo/pojo/mc.dart';
 import 'package:snd/repo/pojo/sigil.dart';
 import 'package:snd/repo/pojo/wound.dart';
+import 'package:snd/repo/pojo/dice.dart';
 
 import 'package:snd/ui/base/page.dart';
+import 'package:snd/ui/battle/dice_widget.dart';
 import 'package:snd/ui/battle/enemies_widget.dart';
 import 'package:snd/vm/battle_vm.dart';
 
@@ -27,6 +29,7 @@ class BattlePage extends MyPage<BattleState> {
 
     final MC mc = data.mc;
     final Map<String, Creature> enemies = data.enemies;
+    final Map<String, Dice> diceCollection = data.dices;
     final Map<String, WoundDeck> woundDeckCollection = data.woundDeckCollection;
     final List<String> drawnCards = data.drawnCards;
     final Map<String, Wound> woundCollection = data.woundCollection;
@@ -41,6 +44,8 @@ class BattlePage extends MyPage<BattleState> {
         DeckWidget(woundDeckCollection, eventHandler),
         SizedBox(height: 2),
         WoundCardsWidget(drawnCards, woundCollection, eventHandler),
+        SizedBox(height: 2),
+        DiceWidget(diceCollection, eventHandler),
         SizedBox(height: 2),
         MCWidget(mc, eventHandler),
         SizedBox(height: 4),
