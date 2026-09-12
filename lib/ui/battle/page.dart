@@ -15,6 +15,7 @@ import 'package:snd/vm/battle_vm.dart';
 import 'deck_widget.dart';
 import 'wound_cards_widget.dart';
 import 'mc_widget.dart';
+import 'timeline_widget.dart';
 
 class BattlePage extends MyPage<BattleState> {
   const BattlePage({super.key, required super.stream, required super.initialData, required super.eventHandler});
@@ -42,13 +43,14 @@ class BattlePage extends MyPage<BattleState> {
         EnemiesWidget(enemies, eventHandler),
         SizedBox(height: 2),
         DeckWidget(woundDeckCollection, eventHandler),
-        SizedBox(height: 2),
-        WoundCardsWidget(drawnCards, woundCollection, eventHandler),
+        // SizedBox(height: 2),
+        // WoundCardsWidget(drawnCards, woundCollection, eventHandler),
         SizedBox(height: 2),
         DiceWidget(diceCollection, eventHandler),
         SizedBox(height: 2),
         MCWidget(mc, eventHandler),
         SizedBox(height: 4),
+        TimelineWidget(data.timeline, eventHandler),
       ],
     );
   }

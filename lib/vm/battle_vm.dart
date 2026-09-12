@@ -11,6 +11,9 @@ import 'package:snd/repo/pojo/dice.dart';
 import 'package:snd/repo/pojo/sigil.dart';
 import 'package:snd/repo/wound_deck_repo.dart';
 import 'package:snd/repo/creatures_repo.dart';
+import 'package:snd/repo/timeline_repo.dart';
+
+import 'package:collection/collection.dart';
 
 class BattleVM extends EventProcessor<BattleState> {
   final MCRepo mcRepo;
@@ -18,11 +21,14 @@ class BattleVM extends EventProcessor<BattleState> {
   final WoundDeckRepo woundDeckRepo;
   final OriginsRepo originsRepo;
   final SigilsRepo sigilsRepo;
+  final TimelineRepo timelineRepo;
+  final Timeline timeline = Timeline();
+
   // final MC mc;
   // final Map<String, Origin> originColleciton;
   // final Map<String, Sigil> sigilCollection;
 
-  BattleVM(this.mcRepo, this.creaturesRepo, this.woundDeckRepo, this.originsRepo, this.sigilsRepo, {super.proxies})
+  BattleVM(this.mcRepo, this.creaturesRepo, this.woundDeckRepo, this.originsRepo, this.sigilsRepo, this.timelineRepo, {super.proxies})
     : super(
         BattleState(
           mc: mcRepo.latestState,
@@ -33,6 +39,7 @@ class BattleVM extends EventProcessor<BattleState> {
           woundCollection: woundDeckRepo.latestState.woundCollection,
           originColleciton: originsRepo.latestState,
           sigilCollection: sigilsRepo.latestState,
+          timeline: [],
         ),
       ) {
     mcRepo.stream.listen(
@@ -41,6 +48,8 @@ class BattleVM extends EventProcessor<BattleState> {
       onDone: () => print('Stream closed'),
       cancelOnError: false,
     );
+
+    // Place actors in da turn queue
   }
 
   @override
@@ -79,6 +88,7 @@ class BattleState {
   final Map<String, Wound> woundCollection;
   final Map<String, Origin> originColleciton;
   final Map<String, Sigil> sigilCollection;
+  final List<TurnEvent> timeline;
 
   BattleState({
     required this.mc,
@@ -89,6 +99,7 @@ class BattleState {
     required this.woundCollection,
     required this.originColleciton,
     required this.sigilCollection,
+    required this.timeline,
   });
   BattleState copyWith({
     MC? mc,
@@ -99,6 +110,7 @@ class BattleState {
     Map<String, Wound>? woundCollection,
     Map<String, Origin>? originColleciton,
     Map<String, Sigil>? sigilCollection,
+    List<TurnEvent>? timeline,
   }) {
     return BattleState(
       mc: mc ?? this.mc,
@@ -109,6 +121,43 @@ class BattleState {
       woundCollection: woundCollection ?? this.woundCollection,
       originColleciton: originColleciton ?? this.originColleciton,
       sigilCollection: sigilCollection ?? this.sigilCollection,
+      timeline: timeline ?? this.timeline,
     );
   }
+}
+
+// Move to separate repo ?
+// Turns is not ABABAB
+// If creature A is faster it can be ABABAA..
+class Timeline {
+  final _heap = HeapPriorityQueue<TurnEvent>((te1, te2) => te2.schedule.compareTo(te1.schedule));
+  int now = 0; // i64
+
+  final Map<String, List<TurnEvent>> actionsByActorId = {};
+
+  TurnEvent proceedToNext() {
+    TurnEvent next = _heap.removeFirst();
+
+    List<TurnEvent>? events = actionsByActorId[next.actorId];
+
+    if (events != null) {
+      events.remove(next);
+    }
+
+    now = next.schedule;
+    return next;
+  }
+
+  void schedule(TurnEvent event) {
+    _heap.add(event);
+  }
+
+  // cancelByActorId() {}
+}
+
+class TurnEvent {
+  final String actorId;
+  final int schedule;
+
+  TurnEvent(this.actorId, this.schedule);
 }
