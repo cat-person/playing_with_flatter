@@ -13,10 +13,10 @@ class Sigil {
 
 class Modifier {
   String statId;
-  int modifier;
+  int value;
   int upTo;
 
-  Modifier(this.statId, this.modifier, this.upTo);
+  Modifier(this.statId, this.value, this.upTo);
 }
 
 const Map<String, Sigil> sigilCollection = {

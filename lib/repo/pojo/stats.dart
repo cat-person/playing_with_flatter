@@ -24,12 +24,12 @@ abstract class Stat {
 }
 
 abstract class PrimaryStat extends Stat {
-  static const String mysticism = "mysticism";
-  static const String strength = "strength";
-  static const String speed = "speed";
-  static const String perception = "perception";
-  static const String constitution = "constitution";
-  static const String intelligence = "intelligence";
+  static const String mysticism = "mst";
+  static const String strength = "str";
+  static const String speed = "spd";
+  static const String perception = "pcp";
+  static const String constitution = "con";
+  static const String intelligence = "int";
 
   List<Modifier> modifiers;
   PrimaryStat(super.statId, this.modifiers);

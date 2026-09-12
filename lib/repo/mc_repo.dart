@@ -4,7 +4,7 @@ import 'pojo/mc.dart';
 import 'package:snd/event_processor/event.dart';
 
 class MCRepo extends EventProcessor<MC> {
-  MCRepo({super.proxies}) : super(MC());
+  MCRepo({super.proxies}) : super(MC("none", [], []));
 
   @override
   bool internalEventHandler(Event event) {

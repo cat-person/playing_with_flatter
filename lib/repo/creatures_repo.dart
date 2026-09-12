@@ -23,7 +23,7 @@ extension CreatureExt on Creature {
       if (sigilModifiers != null) {
         for (Modifier modifier in sigilModifiers) {
           int currentStat = stats[modifier.statId] ?? 0;
-          stats[modifier.statId] = min(currentStat + modifier.modifier, modifier.upTo);
+          stats[modifier.statId] = min(currentStat + modifier.value, modifier.upTo);
         }
       }
     }

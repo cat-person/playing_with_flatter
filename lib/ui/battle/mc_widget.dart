@@ -42,9 +42,9 @@ class MCWidget extends StatelessWidget {
               child: ListView.builder(
                 padding: const EdgeInsets.all(8),
                 scrollDirection: Axis.horizontal,
-                itemCount: mc.actions.length,
+                itemCount: ["heal", "bite"].length,
                 itemBuilder: (BuildContext context, int index) {
-                  final String actionId = mc.actions[index];
+                  final String actionId = ["heal", "bite"][index];
                   return SizedBox(
                     height: 40,
                     width: 140,
