@@ -18,8 +18,6 @@ class Creature {
         result[modifier.statId] = (result[modifier.statId] ?? 0) + modifier.value as int;
       });
 
-    // Synthetic
-    result["ini"] = (result["spd"] ?? 1) * (result["pcp"] ?? 1);
     return result;
   }
 

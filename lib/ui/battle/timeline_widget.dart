@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:snd/repo/pojo/mc.dart';
 import 'package:snd/event_processor/event.dart';
-import 'package:snd/vm/battle_vm.dart';
+import 'package:snd/repo/timeline_repo.dart';
 import 'dart:ui';
 
 class TimelineWidget extends StatelessWidget {
@@ -28,11 +27,11 @@ class TimelineWidget extends StatelessWidget {
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             // padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-            itemCount: 18,
+            itemCount: timeline.length,
             itemBuilder: (BuildContext context, int index) {
               return SizedBox(
                 width: 80,
-                child: Card(child: Center(child: Text("AAA"))),
+                child: Card(child: Center(child: Text(timeline[index].actorId))),
               );
             },
           ),

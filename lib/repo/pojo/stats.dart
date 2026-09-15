@@ -33,7 +33,6 @@ abstract class PrimaryStat extends Stat {
 
   List<Modifier> modifiers;
   PrimaryStat(super.statId, this.modifiers);
-  List<Dice> getDice();
 }
 
 abstract class SynthStat extends Stat {

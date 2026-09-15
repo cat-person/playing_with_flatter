@@ -32,8 +32,8 @@ class MyApp extends StatelessWidget {
     MCRepo mcRepo = MCRepo(proxies: [consoleProxy]);
     OriginsRepo originsRepo = OriginsRepo(proxies: [consoleProxy]);
     SigilsRepo sigilsRepo = SigilsRepo(proxies: [consoleProxy]);
-    CreaturesRepo creaturesRepo = CreaturesRepo();
-    TimelineRepo timelineRepo = TimelineRepo();
+    CreaturesRepo creaturesRepo = CreaturesRepo(proxies: [consoleProxy]);
+    TimelineRepo timelineRepo = TimelineRepo(proxies: [consoleProxy]);
 
     WoundDeckRepo woundDeckRepo = WoundDeckRepo(
       WoundDeckState({"wound_light": LightDeck(), "wound_serious": SeriousDeck(), "wound_severe": SevereDeck()}, {}, []),

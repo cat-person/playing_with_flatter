@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:snd/event_processor/event_processor.dart';
 
 import 'package:snd/repo/pojo/origins.dart';
 import 'package:snd/repo/pojo/mc.dart';
-import 'package:snd/repo/pojo/sigil.dart';
 
 import 'package:snd/ui/base/page.dart';
 import 'package:snd/vm/character_creation_vm.dart';

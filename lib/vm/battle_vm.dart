@@ -14,6 +14,7 @@ import 'package:snd/repo/creatures_repo.dart';
 import 'package:snd/repo/timeline_repo.dart';
 
 import 'package:collection/collection.dart';
+import 'dart:math';
 
 class BattleVM extends EventProcessor<BattleState> {
   final MCRepo mcRepo;
@@ -23,10 +24,6 @@ class BattleVM extends EventProcessor<BattleState> {
   final SigilsRepo sigilsRepo;
   final TimelineRepo timelineRepo;
   final Timeline timeline = Timeline();
-
-  // final MC mc;
-  // final Map<String, Origin> originColleciton;
-  // final Map<String, Sigil> sigilCollection;
 
   BattleVM(this.mcRepo, this.creaturesRepo, this.woundDeckRepo, this.originsRepo, this.sigilsRepo, this.timelineRepo, {super.proxies})
     : super(
@@ -49,15 +46,35 @@ class BattleVM extends EventProcessor<BattleState> {
       cancelOnError: false,
     );
 
+    timelineRepo.stream.listen(
+      (data) => update(latestState.copyWith(timeline: data.events)),
+      onError: (error) => print('Error: $error'),
+      onDone: () => print('Stream closed'),
+      cancelOnError: false,
+    );
+
     // Place actors in da turn queue
+    for (Creature creature in [latestState.mc, ...latestState.enemies.values]) {
+      int pcp = creature.stats["pcp"] ?? 1;
+      int spd = creature.stats["spd"] ?? 2;
+      timelineRepo.eventHandler(
+        Event("schedule_turn", params: {"actor_id": creature.id, "delay": log2(pcp * spd).round()}),
+      ); //(10.0 - log2(initiative)).round()
+    }
+  }
+
+  double log2(num x) {
+    // if (x is int && x > 0 && (x & (x - 1)) == 0) {
+    //   return (x.bitLength - 1).toDouble(); // exact
+    // }
+    return log(x) * log2e;
   }
 
   @override
   bool internalEventHandler(Event event) {
     switch (event.id) {
-      case "origin_selected":
-        mcRepo.eventHandler(event);
-
+      case "schedule_turn":
+        timelineRepo.eventHandler(event);
         return true;
       case "sigil_selected":
         mcRepo.eventHandler(event);
@@ -130,7 +147,7 @@ class BattleState {
 // Turns is not ABABAB
 // If creature A is faster it can be ABABAA..
 class Timeline {
-  final _heap = HeapPriorityQueue<TurnEvent>((te1, te2) => te2.schedule.compareTo(te1.schedule));
+  final _heap = HeapPriorityQueue<TurnEvent>((te1, te2) => te2.eventTurn.compareTo(te1.eventTurn));
   int now = 0; // i64
 
   final Map<String, List<TurnEvent>> actionsByActorId = {};
@@ -144,7 +161,7 @@ class Timeline {
       events.remove(next);
     }
 
-    now = next.schedule;
+    now = next.eventTurn;
     return next;
   }
 
@@ -153,11 +170,4 @@ class Timeline {
   }
 
   // cancelByActorId() {}
-}
-
-class TurnEvent {
-  final String actorId;
-  final int schedule;
-
-  TurnEvent(this.actorId, this.schedule);
 }
